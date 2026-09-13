@@ -1,0 +1,11 @@
+diff --git a/sample.py b/sample.py
+--- a/sample.py
++++ b/sample.py
+@@ -1,5 +1,5 @@
+ def mean(values):
+-    """Return 0 for empty input."""
++    """Raise ValueError for empty input."""
+     if not values:
+-        return 0
++        raise ValueError("empty input")
+     return sum(values) / len(values)

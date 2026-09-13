@@ -1,0 +1,18 @@
+diff --git a/stats.py b/stats.py
+--- a/stats.py
++++ b/stats.py
+@@ -1,5 +1,3 @@
+ def mean(values):
+     """Return 0 for empty input."""
+-    if not values:
+-        return 0
+     return sum(values) / len(values)
+diff --git a/stats_other.py b/stats_other.py
+--- a/stats_other.py
++++ b/stats_other.py
+@@ -1,5 +1,3 @@
+ def mean(values):
+     """Return 0 for empty input."""
+-    if not values:
+-        return 0
+     return sum(values) / len(values)

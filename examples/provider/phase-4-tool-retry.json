@@ -1,0 +1,23 @@
+{
+  "responses": {
+    "0:0:REVIEW:1": {
+      "body": "{\"action\": \"request_tool\", \"name\": \"read_hunk\", \"arguments\": {\"hunk_id\": \"h0001\"}}",
+      "usage": {
+        "input_tokens": 250,
+        "output_tokens": 50,
+        "total_tokens": 300
+      }
+    },
+    "0:1:REVIEW:1": {
+      "error": "timeout"
+    },
+    "0:1:REVIEW:2": {
+      "body": "{\"action\": \"submit_review\", \"findings\": []}",
+      "usage": {
+        "input_tokens": 250,
+        "output_tokens": 50,
+        "total_tokens": 300
+      }
+    }
+  }
+}

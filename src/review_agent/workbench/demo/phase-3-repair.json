@@ -1,0 +1,22 @@
+{
+  "responses": {
+    "0:0:REVIEW:1": {
+      "body": "{\"action\":",
+      "usage": {
+        "input_tokens": 250,
+        "output_tokens": 50,
+        "total_tokens": 300
+      },
+      "finish": "COMPLETE"
+    },
+    "0:0:REPAIR:1": {
+      "body": "{\n  \"action\": \"submit_review\",\n  \"findings\": [\n    {\n      \"title\": \"删除空列表保护后会抛出 ZeroDivisionError\",\n      \"hunk_id\": \"h0001\",\n      \"side\": \"old\",\n      \"line\": 3,\n      \"trigger\": \"调用 mean([])。\",\n      \"actual_behavior\": \"len(values) 为 0，除法抛出 ZeroDivisionError。\",\n      \"expected_behavior\": \"函数契约仍要求空列表返回 0。\",\n      \"introduced_by\": \"本次删除了空列表提前返回分支，使空列表到达除法表达式。\",\n      \"expectation_evidence\": [\n        \"h0001:new:2\"\n      ],\n      \"evidence\": [\n        \"h0001:old:3\",\n        \"h0001:old:4\",\n        \"h0001:new:3\"\n      ],\n      \"impact\": \"原本可处理的空列表输入变为异常，调用方会收到意外失败。\",\n      \"suggestion\": \"保留空列表保护，并增加 mean([]) 返回 0 的回归测试。\",\n      \"severity\": \"medium\",\n      \"confidence\": \"high\"\n    }\n  ],\n  \"reason\": \"\"\n}",
+      "usage": {
+        "input_tokens": 250,
+        "output_tokens": 50,
+        "total_tokens": 300
+      },
+      "finish": "COMPLETE"
+    }
+  }
+}

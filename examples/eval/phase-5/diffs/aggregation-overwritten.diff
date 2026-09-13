@@ -1,0 +1,11 @@
+diff --git a/totals.py b/totals.py
+--- a/totals.py
++++ b/totals.py
+@@ -1,6 +1,6 @@
+ def totals_by_account(events):
+     """Sum the amounts for each account across all events."""
+     totals = {}
+     for account, amount in events:
+-        totals[account] = totals.get(account, 0) + amount
++        totals[account] = amount
+     return totals

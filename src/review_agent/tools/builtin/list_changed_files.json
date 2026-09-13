@@ -1,0 +1,37 @@
+{
+  "name": "list_changed_files",
+  "version": "1.0.0",
+  "handler_id": "list_changed_files",
+  "description": "List file IDs and paths in this task sanitized diff; no repository files are read.",
+  "input_schema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+  },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "file_id": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 64
+      },
+      "path": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4096
+      }
+    },
+    "required": [
+      "file_id",
+      "path"
+    ],
+    "additionalProperties": false
+  },
+  "permissions": [
+    "snapshot.files"
+  ],
+  "timeout_ms": 2000,
+  "max_output_bytes": 32768
+}

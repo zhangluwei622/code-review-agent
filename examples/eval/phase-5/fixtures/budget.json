@@ -1,0 +1,11 @@
+{
+  "quote_input_tokens": 6000,
+  "default": {
+    "body": "{\"action\": \"submit_review\", \"findings\": []}",
+    "usage": {
+      "input_tokens": 250,
+      "output_tokens": 50,
+      "total_tokens": 300
+    }
+  }
+}

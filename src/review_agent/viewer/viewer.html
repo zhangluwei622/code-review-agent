@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="__CSP__">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>Review Agent · Trace Explorer</title>
+<style>__CSS__</style>
+</head>
+<body>
+<header class="masthead"><div class="brand"><span class="brand-mark">R</span> REVIEW AGENT <span class="divider">/</span> <span class="brand-sub">Trace Explorer</span></div><span class="offline"><span class="dot"></span> 本地 · 只读</span></header>
+<main>
+<section class="intro"><div><p class="eyebrow">CALL OBSERVABILITY</p><h1>每条评论，都有来路。</h1><p id="identity" class="muted mono"></p></div><div id="mode" class="mode"></div></section>
+<div id="error" role="alert" hidden></div>
+<section id="overview" class="overview" aria-label="任务概览"></section>
+<details class="meta-panel"><summary>任务、版本与预算快照 <span class="muted">查看导出范围及缺失信息</span></summary><div id="metadata"></div></details>
+<section class="workspace" aria-label="调用工作区">
+<aside class="timeline-panel"><div class="panel-heading"><h2>调用时间线</h2><span id="node-count" class="counter"></span></div><p class="small muted">按引用依赖排列 · 非绝对时钟排序</p><label class="search-label">搜索<input id="search" type="search" placeholder="ID、正文、错误码…" autocomplete="off"></label><div class="filters"><label>单元<select id="unit-filter"><option value="">全部单元</option></select></label><label>类型<select id="kind-filter"><option value="">全部类型</option></select></label><label>状态<select id="status-filter"><option value="">全部状态</option></select></label></div><div id="timeline" class="timeline" aria-label="调用列表"></div></aside>
+<section class="detail-panel" aria-label="详情"><div id="selection-header"></div><nav id="tabs" class="tabs" aria-label="详情分类"></nav><div id="detail-content"></div></section>
+<aside class="findings-panel"><div class="panel-heading"><h2>接受评论</h2><span id="finding-count" class="counter"></span></div><p class="small muted">保留原置信度与原校验结论</p><div id="findings"></div><div class="legend"><h3>读图说明</h3><p>REPAIR 指向具体错误回复；重试通过持久化 decision 关联原 UNKNOWN。</p><p>工具卡可追溯触发请求与后续消费。评论锚点、支持证据和契约证据分别展示。</p><p>当前 trace 未导出每次 resume／checkpoint 事件，不能据此统计恢复次数。</p></div></aside>
+</section>
+<footer><span>TRACE VIEWER / 01</span><span>来源与模型正文仅作文本展示 · 无网络、无执行入口</span></footer>
+</main>
+<noscript>本地筛选与关联查看需要浏览器 JavaScript；页面没有远程资源或执行接口。</noscript>
+<script type="application/json" id="trace-data">__PAYLOAD__</script>
+<script>__SCRIPT__</script>
+</body>
+</html>

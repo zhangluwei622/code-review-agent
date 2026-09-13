@@ -1,0 +1,10 @@
+diff --git a/test_errors.py b/test_errors.py
+new file mode 100644
+--- /dev/null
++++ b/test_errors.py
+@@ -0,0 +1,5 @@
++import pytest
++
++def test_zero_division():
++    with pytest.raises(ZeroDivisionError):
++        1 / 0

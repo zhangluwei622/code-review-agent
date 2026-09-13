@@ -1,0 +1,342 @@
+{
+  "schema_version": 1,
+  "dataset_id": "python-review-offline-v1",
+  "annotation_status": "PENDING_USER_CONFIRMATION",
+  "groups": [
+    {
+      "group_id": "empty_input",
+      "split": "development",
+      "known_before_split": true,
+      "rationale": "空输入处理与契约变更是一组；包含已知漏报，不能进入留出集。"
+    },
+    {
+      "group_id": "index_boundary",
+      "split": "development",
+      "known_before_split": false,
+      "rationale": "索引等于长度的回归与修复是一组。"
+    },
+    {
+      "group_id": "exception_contract",
+      "split": "development",
+      "known_before_split": true,
+      "rationale": "异常是否违反显式契约，包括有意异常测试。"
+    },
+    {
+      "group_id": "context_evidence",
+      "split": "development",
+      "known_before_split": true,
+      "rationale": "区分可取得的契约和 diff 外不可取得的依据。"
+    },
+    {
+      "group_id": "nullable_record",
+      "split": "holdout",
+      "known_before_split": false,
+      "rationale": "None 输入契约的移除与等价改写。"
+    },
+    {
+      "group_id": "return_contract",
+      "split": "holdout",
+      "known_before_split": false,
+      "rationale": "返回值契约的破坏与等价改写。"
+    }
+  ],
+  "cases": [
+    {
+      "case_id": "empty-guard-removed",
+      "group_id": "empty_input",
+      "title": "删除空列表保护，旧契约仍有效",
+      "diff": "diffs/empty-guard-removed.diff",
+      "input_digest": "cc2e04aec77235952468941d3b036f3572820031b97faad7d8649f7b1fe138c4",
+      "fixture": "fixtures/success.json",
+      "fixture_digest": "1c03e2d72988b975fcd3afc929d3a839af5cab988fa4ec4df76ee2aaf5e5e59c",
+      "classification": "defect",
+      "issues": [
+        {
+          "issue_id": "empty-guard-removed-issue",
+          "trigger": "mean([])",
+          "actual": "除以 0，抛出 ZeroDivisionError。",
+          "expected": "按未修改的 docstring 返回 0。",
+          "causality": "本次删除了空列表提前返回分支。",
+          "evidence": [
+            "h0001:old:3",
+            "h0001:old:4",
+            "h0001:new:2",
+            "h0001:new:3"
+          ],
+          "confidence": "high"
+        }
+      ],
+      "must_not_report": [],
+      "rationale": "输入为空时仍承诺返回 0；删除保护后必达除法。既有真实漏报只关联到本例。",
+      "tool_requirement": "not_needed",
+      "tool_evidence": [],
+      "tool_rationale": "首轮 diff 已包含判断所需的变更和契约。",
+      "provenance": [
+        "examples/eval/phase-2-live-badcases.json",
+        "task_535e7d3adc7d4c50b359f41e087f02d8"
+      ]
+    },
+    {
+      "case_id": "empty-contract-changed",
+      "group_id": "empty_input",
+      "title": "同步明确空列表抛异常",
+      "diff": "diffs/empty-contract-changed.diff",
+      "input_digest": "72eed7779055c0d7beb6d5f0da2dc12a7a3ef40e7a1800678a94abcbd6aab92d",
+      "fixture": "fixtures/empty.json",
+      "fixture_digest": "e5adc15472d2db1e74a8370c8d4f72d5032a61cc87e6a4baf81f297f8284e76f",
+      "classification": "non_defect",
+      "issues": [],
+      "must_not_report": [
+        "仅因空输入不再返回 0 就报告契约回归。"
+      ],
+      "rationale": "docstring 与实现同步修改；diff 未提供仍需返回 0 的反向契约。",
+      "tool_requirement": "not_needed",
+      "tool_evidence": [],
+      "tool_rationale": "首轮 diff 已包含判断所需的变更和契约。",
+      "provenance": []
+    },
+    {
+      "case_id": "boundary-check-weakened",
+      "group_id": "index_boundary",
+      "title": "边界判断漏掉等于长度",
+      "diff": "diffs/boundary-check-weakened.diff",
+      "input_digest": "1d7dade97f28f56ee730a9342847547c6d0b124d1dd16d982cc91bcd578ea02f",
+      "fixture": "fixtures/abstain.json",
+      "fixture_digest": "8989c592ae2229a8deae99bb81af8af48ae57c94192bbf3f04f00ad0097c833c",
+      "classification": "defect",
+      "issues": [
+        {
+          "issue_id": "boundary-check-weakened-issue",
+          "trigger": "item_at([1], 1)",
+          "actual": "访问 items[1] 抛出 IndexError。",
+          "expected": "返回 None。",
+          "causality": "把 >= 改为 >，使等于长度的索引通过保护。",
+          "evidence": [
+            "h0001:new:2",
+            "h0001:new:3",
+            "h0001:new:5"
+          ],
+          "confidence": "high"
+        }
+      ],
+      "must_not_report": [],
+      "rationale": "index 等于长度时也是越界，契约仍要求返回 None。",
+      "tool_requirement": "not_needed",
+      "tool_evidence": [],
+      "tool_rationale": "首轮 diff 已包含判断所需的变更和契约。",
+      "provenance": []
+    },
+    {
+      "case_id": "boundary-check-corrected",
+      "group_id": "index_boundary",
+      "title": "修复等于长度的已有错误",
+      "diff": "diffs/boundary-check-corrected.diff",
+      "input_digest": "8b0ca0c4e2482ea1ba83e77866c1aa47708a885c8a691d4f2a0d00480e875f82",
+      "fixture": "fixtures/empty.json",
+      "fixture_digest": "e5adc15472d2db1e74a8370c8d4f72d5032a61cc87e6a4baf81f297f8284e76f",
+      "classification": "non_defect",
+      "issues": [],
+      "must_not_report": [
+        "把旧版本的越界缺陷报告为本次引入。"
+      ],
+      "rationale": "该变更修复旧的边界缺陷，不是引入新的越界。",
+      "tool_requirement": "not_needed",
+      "tool_evidence": [],
+      "tool_rationale": "首轮 diff 已包含判断所需的变更和契约。",
+      "provenance": []
+    },
+    {
+      "case_id": "parse-error-unhandled",
+      "group_id": "exception_contract",
+      "title": "移除契约要求的异常处理",
+      "diff": "diffs/parse-error-unhandled.diff",
+      "input_digest": "4ea36fa3920612c405fe5e1f045a35f4f0486b52ba98a9b425b0d4a628f38003",
+      "fixture": "fixtures/budget.json",
+      "fixture_digest": "23279d6759b4c2f065db0e8e824a305a302f6d728872cc10cb35a1b68b38d31b",
+      "classification": "defect",
+      "issues": [
+        {
+          "issue_id": "parse-error-unhandled-issue",
+          "trigger": "parse_count(\"abc\")",
+          "actual": "int(\"abc\") 抛出 ValueError。",
+          "expected": "返回 0。",
+          "causality": "移除了捕获 ValueError 并返回 0 的分支。",
+          "evidence": [
+            "h0001:new:2",
+            "h0001:new:3",
+            "h0001:old:5"
+          ],
+          "confidence": "high"
+        }
+      ],
+      "must_not_report": [],
+      "rationale": "非法整数字符串的回退仍是明确契约，但异常捕获被删除。",
+      "tool_requirement": "not_needed",
+      "tool_evidence": [],
+      "tool_rationale": "首轮 diff 已包含判断所需的变更和契约。",
+      "provenance": []
+    },
+    {
+      "case_id": "intentional-exception-test",
+      "group_id": "exception_contract",
+      "title": "测试有意捕获除零异常",
+      "diff": "diffs/intentional-exception-test.diff",
+      "input_digest": "11f9c02db6daf8d857967bcbf3a53a44280bfc02819c6094d763839745f80af3",
+      "fixture": "fixtures/repair.json",
+      "fixture_digest": "2b29b68fe184b65ab10a894eea3f68c8158d5772b7fccdf82ffaacd2111a5bf6",
+      "classification": "non_defect",
+      "issues": [],
+      "must_not_report": [
+        "把被 pytest.raises 捕获的预期除零异常报告为缺陷。"
+      ],
+      "rationale": "异常发生在 pytest.raises 中，是被验证的预期行为。",
+      "tool_requirement": "not_needed",
+      "tool_evidence": [],
+      "tool_rationale": "首轮 diff 已包含判断所需的变更和契约。",
+      "provenance": [
+        "examples/diffs/intentional-error-test.diff"
+      ]
+    },
+    {
+      "case_id": "caller-contract-context",
+      "group_id": "context_evidence",
+      "title": "调用方非空约束位于首轮省略的上下文",
+      "diff": "diffs/caller-contract-context.diff",
+      "input_digest": "9fce4759494fc4c6bc9df063798f67fa4bac258507f372db9eeb0d6da9db4032",
+      "fixture": "fixtures/context.json",
+      "fixture_digest": "7e29e86b2c6564128183315ce20b54f66178f133ccdeb1f0729b751742c82fcb",
+      "classification": "non_defect",
+      "issues": [],
+      "must_not_report": [
+        "忽略非空输入契约，直接断言合法调用会除零。"
+      ],
+      "rationale": "同一 diff 的非空输入契约排除了空输入除零；需取回首轮省略的第一行。",
+      "tool_requirement": "required",
+      "tool_evidence": [
+        "h0001:new:1"
+      ],
+      "tool_rationale": "第一行契约在首轮预览外，但可从同单元安全 diff 获得。",
+      "provenance": [
+        "examples/diffs/phase-4-context.diff"
+      ]
+    },
+    {
+      "case_id": "performance-context-missing",
+      "group_id": "context_evidence",
+      "title": "双层循环缺少规模与性能目标",
+      "diff": "diffs/performance-context-missing.diff",
+      "input_digest": "0f99c1de55fb19ef4b4c51f33b2b77c03ed266f9cb3581d63e4093e5709fa8f6",
+      "fixture": "fixtures/abstain.json",
+      "fixture_digest": "8989c592ae2229a8deae99bb81af8af48ae57c94192bbf3f04f00ad0097c833c",
+      "classification": "insufficient_evidence",
+      "issues": [],
+      "must_not_report": [
+        "仅凭双层循环给出高置信度性能缺陷。"
+      ],
+      "rationale": "可观察到二次复杂度，但没有规模、SLO 或预期算法依据，无法确定实际性能缺陷。",
+      "tool_requirement": "unavailable",
+      "tool_evidence": [],
+      "tool_rationale": "所需调用规模和性能约束不在 diff 内，现有工具无法读取仓库外部上下文。",
+      "provenance": []
+    },
+    {
+      "case_id": "null-guard-removed",
+      "group_id": "nullable_record",
+      "title": "移除 None 输入保护",
+      "diff": "diffs/null-guard-removed.diff",
+      "input_digest": "1d98b200e3716f8cda89a7acf09457d068ac0593b03fe6e42b5af85441c5a850",
+      "fixture": "fixtures/unknown.json",
+      "fixture_digest": "80a9c3fbe3112f15e5530c185b757c4197a2379f820d4e44aea2b372fe64389d",
+      "classification": "defect",
+      "issues": [
+        {
+          "issue_id": "null-guard-removed-issue",
+          "trigger": "display_name(None)",
+          "actual": "对 None 下标访问导致 TypeError。",
+          "expected": "返回 unknown 字符串。",
+          "causality": "删除 record is None 的提前返回。",
+          "evidence": [
+            "h0001:new:2",
+            "h0001:new:3",
+            "h0001:old:3"
+          ],
+          "confidence": "high"
+        }
+      ],
+      "must_not_report": [],
+      "rationale": "未修改契约要求 None 返回 unknown；移除保护导致对 None 下标访问。",
+      "tool_requirement": "not_needed",
+      "tool_evidence": [],
+      "tool_rationale": "首轮 diff 已包含判断所需的变更和契约。",
+      "provenance": []
+    },
+    {
+      "case_id": "null-guard-equivalent",
+      "group_id": "nullable_record",
+      "title": "None 保护的等价表达式",
+      "diff": "diffs/null-guard-equivalent.diff",
+      "input_digest": "d4b43dac4990056874bfcb5b4144256b1b5d987819d858d3d6be5944cbdd46b5",
+      "fixture": "fixtures/empty.json",
+      "fixture_digest": "e5adc15472d2db1e74a8370c8d4f72d5032a61cc87e6a4baf81f297f8284e76f",
+      "classification": "non_defect",
+      "issues": [],
+      "must_not_report": [
+        "声称条件表达式会无条件求值 record[\"name\"]。"
+      ],
+      "rationale": "条件表达式仅计算选中的分支，None 仍返回 unknown。",
+      "tool_requirement": "not_needed",
+      "tool_evidence": [],
+      "tool_rationale": "首轮 diff 已包含判断所需的变更和契约。",
+      "provenance": []
+    },
+    {
+      "case_id": "return-statement-removed",
+      "group_id": "return_contract",
+      "title": "删除返回语句导致隐式 None",
+      "diff": "diffs/return-statement-removed.diff",
+      "input_digest": "0fb53275ef7f760b3bb6f502a9f39047191ab45a959cc537a64a7ee9bb33733a",
+      "fixture": "fixtures/truncated.json",
+      "fixture_digest": "5a6f363cb2952e9a7fbd5d3286b05bc3bd8bc19a99a075b2e2386e0d9e2e88cc",
+      "classification": "defect",
+      "issues": [
+        {
+          "issue_id": "return-statement-removed-issue",
+          "trigger": "response(3)",
+          "actual": "函数隐式返回 None。",
+          "expected": "返回 {\"value\": 3}。",
+          "causality": "删除最后的 return payload。",
+          "evidence": [
+            "h0001:new:2",
+            "h0001:old:4"
+          ],
+          "confidence": "high"
+        }
+      ],
+      "must_not_report": [],
+      "rationale": "构造字典却没有返回，违反未修改的返回契约。",
+      "tool_requirement": "not_needed",
+      "tool_evidence": [],
+      "tool_rationale": "首轮 diff 已包含判断所需的变更和契约。",
+      "provenance": []
+    },
+    {
+      "case_id": "return-inline-equivalent",
+      "group_id": "return_contract",
+      "title": "内联返回字典保持契约",
+      "diff": "diffs/return-inline-equivalent.diff",
+      "input_digest": "eeefeedfa7331daf39e0de5c5664f1005281dee8d9ff90f3abdbfafd79cd378e",
+      "fixture": "fixtures/empty.json",
+      "fixture_digest": "e5adc15472d2db1e74a8370c8d4f72d5032a61cc87e6a4baf81f297f8284e76f",
+      "classification": "non_defect",
+      "issues": [],
+      "must_not_report": [
+        "把局部变量删除错误解释为返回值丢失。"
+      ],
+      "rationale": "删除局部变量但仍显式返回相同字典。",
+      "tool_requirement": "not_needed",
+      "tool_evidence": [],
+      "tool_rationale": "首轮 diff 已包含判断所需的变更和契约。",
+      "provenance": []
+    }
+  ]
+}

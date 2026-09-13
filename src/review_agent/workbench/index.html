@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Review Agent · 审阅工作台</title>
+  <link rel="stylesheet" href="/app.css">
+  <script src="/app.js" defer></script>
+</head>
+<body data-pane="input">
+  <aside class="sidebar">
+    <a class="brand" href="/"><span class="brand-mark">R<span>↗</span></span><span>Review Agent<small>CODE REVIEW WORKSPACE</small></span></a>
+    <div class="task-group"><div class="nav-label">在线任务 <span id="live-count">0</span></div>
+      <button id="new-live" class="new-task"><span>＋</span> 新建在线审阅</button>
+      <nav id="live-history" aria-label="在线任务历史"></nav>
+    </div>
+    <div class="task-group demo-group"><div class="nav-label">演示任务 <span id="demo-count">0</span></div>
+      <button id="new-task" class="new-task demo-new"><span>＋</span> 运行离线演示</button>
+      <nav id="demo-history" aria-label="演示任务历史"></nav>
+    </div>
+    <div class="sidebar-bottom"><span class="tiny-dot"></span> 单 Agent · S2<small>任务保存在本机<br>刷新页面不会重新发送请求</small></div>
+  </aside>
+  <main>
+    <header class="topbar"><button id="history-toggle" class="secondary" aria-label="展开任务栏" aria-expanded="false">☰</button><span>工作台 <span class="slash">/</span> <span id="breadcrumb">新建审阅</span></span><span id="connection" class="connection"><i></i> 正在连接本地服务</span><button id="api-settings" class="secondary">API 设置 <span id="api-status">未设置</span></button></header>
+    <section class="page-heading"><div><p class="eyebrow">REVIEW WORKSPACE</p><h1>代码变更的每一步，都有迹可循。</h1><p class="subtitle">提交输入，跟踪每一次调用，查看问题背后的证据。</p></div><span class="version-pill">S2 <span>冻结审阅协议</span></span></section>
+    <div id="error" class="alert" role="alert" hidden></div>
+    <nav class="pane-tabs" aria-label="工作区面板"><button data-pane="input" aria-selected="true">01 输入</button><button data-pane="run" aria-selected="false">02 执行过程</button><button data-pane="report" aria-selected="false">03 报告</button></nav>
+    <div class="workspace">
+      <section class="input-panel panel" data-pane="input">
+        <div class="panel-title"><div><span class="section-number">01</span><h2 id="input-title">审阅输入</h2></div><span class="muted small">DIFF / PR / MR</span></div>
+        <form id="review-form">
+          <label class="field-label" for="mode">运行方式</label>
+          <select id="mode"><option value="fixture">离线演示 · 预置模型回复</option><option value="deepseek">真实审阅 · DeepSeek</option></select>
+          <p id="mode-help" class="field-help">正在读取运行配置…</p><button type="button" id="configure-inline" class="secondary" hidden>设置 API key 后开始在线审阅</button>
+          <div id="demo-settings"><label class="field-label" for="demo">演示场景</label><select id="demo"></select></div>
+          <div class="input-tabs" role="tablist" aria-label="输入类型"><button type="button" id="diff-tab" role="tab" aria-selected="true">代码 Diff</button><button type="button" id="url-tab" role="tab" aria-selected="false">PR / MR 链接</button></div>
+          <div id="diff-input"><div class="editor-toolbar"><span>UNIFIED DIFF</span><label class="upload" id="upload-label">导入文件<input id="diff-file" type="file" accept=".diff,.patch,.txt" hidden></label></div><textarea id="diff" spellcheck="false" aria-label="代码 diff" placeholder="粘贴 git diff 内容…"></textarea><div class="editor-footer"><span id="input-lines">0 行</span><span>Python 文本变更 · ≤ 1 MiB</span></div></div>
+          <div id="url-input" hidden><label class="field-label" for="url">公开 PR / MR 地址</label><input id="url" type="url" placeholder="https://github.com/owner/repo/pull/123"><p class="field-help">支持 github.com 与 gitlab.com。读取固定提交的变更快照，不执行仓库代码。</p></div>
+          <details class="budget-settings"><summary>运行预算 <span id="budget-caption">100,000 tokens / $0.05</span></summary><div class="budget-fields"><label>任务 tokens<input id="max-tokens" type="number" min="1" max="1000000" value="100000"></label><label>任务 USD<input id="max-cost" type="text" inputmode="decimal" value="0.05"></label><label>单次输出 tokens<input id="max-output" type="number" min="1" max="8192" value="1024"></label></div><p class="field-help">包含后续模型轮次、REPAIR 和 HELD。恢复沿用已冻结预算；金额为本地估算。</p></details>
+          <button id="submit" class="primary" type="submit" disabled><span>开始审阅</span><span>↗</span></button>
+          <p id="submit-help" class="submit-help">离线演示不会调用真实模型，也不评价输入代码质量。</p>
+        </form>
+      </section>
+      <section class="run-panel" data-pane="run">
+        <div class="run-heading"><div><span class="section-number">02</span><h2>执行过程</h2></div><span id="run-badge" class="badge neutral">等待输入</span></div>
+        <div id="steps" class="steps" aria-label="执行阶段"></div>
+        <div id="metrics" class="metrics"></div>
+        <div id="run-message" class="run-message">提交后，这里会自动展示真实执行状态。</div>
+        <div id="recovery" class="recovery" hidden><p id="recovery-text"></p><div><button id="resume" class="secondary">继续原任务</button><button id="retry" class="secondary danger" hidden>明确重试 UNKNOWN</button></div></div>
+        <div class="activity panel"><div class="activity-heading"><div class="activity-tabs" role="tablist" aria-label="运行视图"><button id="calls-tab" role="tab" aria-selected="true">调用流程 <span id="calls-count">0</span></button><button id="events-tab" role="tab" aria-selected="false">状态记录</button></div><span class="live-label"><i></i> <span id="live-text">等待运行</span></span></div>
+          <div id="calls" class="calls"><div class="empty-state"><div class="empty-icon">↗</div><h3>每一步，都有迹可循</h3><p>模型审阅、工具读取、格式修复与证据校验，<br>将在任务运行时自动出现在这里。</p><div class="mini-flow"><span>输入</span><b>→</b><span>Agent</span><b>→</b><span>报告</span></div></div></div>
+          <div id="events" class="events" hidden></div>
+        <section id="inspector" class="inspector panel" hidden><div class="panel-title"><h3 id="inspector-title">调用详情</h3><button id="close-inspector" class="text-button" aria-label="关闭详情">×</button></div><div id="inspector-tabs" class="detail-tabs"></div><div id="inspector-body"></div></section>
+        </div>
+      </section>
+    <section id="report-panel" class="report-panel panel" data-pane="report"><div class="panel-title"><div><span class="section-number">03</span><h2>审阅报告</h2><span id="report-status" class="badge neutral">尚未生成</span></div><div class="downloads"><button data-download="report.md" disabled>↓ Markdown</button><button data-download="trace.json" disabled>↓ Trace JSON</button><button data-download="report.html" disabled>↓ 可观测 HTML</button></div></div><div id="report-content" class="report-empty">完成审阅后，问题、覆盖范围和关联证据会自动汇总到这里。</div></section>
+    </div>
+    <footer><span>只读取安全 diff 快照 · 不执行目标仓库代码</span><span>状态来自已提交记录，时间为工作台观察时间；不展示或推测模型隐藏推理。</span></footer>
+  </main>
+  <dialog id="settings-dialog" aria-labelledby="settings-title">
+    <form id="settings-form" autocomplete="off">
+      <div class="settings-heading"><h2 id="settings-title">在线审阅 · API 设置</h2><button type="button" id="settings-close" class="text-button" aria-label="关闭 API 设置">×</button></div>
+      <p>DeepSeek · deepseek-flash · 冻结 S2 协议</p>
+      <p class="endpoint">https://api.deepseek.com/chat/completions</p>
+      <label class="field-label" for="api-key">API key</label>
+      <input id="api-key" type="password" autocomplete="off" spellcheck="false" minlength="8" maxlength="512" placeholder="输入 DeepSeek API key" required>
+      <p id="settings-status" role="status"></p>
+      <p class="settings-note">仅保存在本地服务内存中，不回显、不存入浏览器或任务记录；服务重启后需重新设置。保存不会发起模型调用，提交在线任务后才可能产生费用。</p>
+      <p id="settings-error" role="alert" hidden></p>
+      <div class="settings-actions"><button type="button" id="clear-key" class="secondary">清除并停用在线入口</button><button id="save-key" class="primary" type="submit">保存 API key</button></div>
+    </form>
+  </dialog>
+  <dialog id="retry-dialog"><h2>重试这次未知调用？</h2><p>原调用的结果不明，HELD 预留将继续保留。此次明确选择会创建一个新 attempt，也可能产生新的费用。</p><p>如果新调用再次 UNKNOWN，需要再次明确选择；不会自动重试。</p><div><button id="retry-cancel" class="secondary">取消</button><button id="retry-confirm" class="primary">确认重试一次</button></div></dialog>
+</body>
+</html>

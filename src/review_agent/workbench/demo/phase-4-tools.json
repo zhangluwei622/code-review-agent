@@ -1,0 +1,52 @@
+{
+  "responses": {
+    "0:0:REVIEW:1": {
+      "body": "{\"action\": \"request_tool\", \"name\": \"read_hunk\", \"arguments\": {\"hunk_id\": \"h0001\"}}",
+      "usage": {
+        "input_tokens": 250,
+        "output_tokens": 50,
+        "total_tokens": 300
+      }
+    },
+    "0:1:REVIEW:1": {
+      "body": "{\"action\": \"request_tool\", \"name\": \"search_diff\", \"arguments\": {\"query\": \"nonempty\", \"limit\": 3}}",
+      "usage": {
+        "input_tokens": 250,
+        "output_tokens": 50,
+        "total_tokens": 300
+      }
+    },
+    "0:2:REVIEW:1": {
+      "body": "{\"action\": \"request_tool\", \"name\": \"list_changed_files\", \"arguments\": {}}",
+      "usage": {
+        "input_tokens": 250,
+        "output_tokens": 50,
+        "total_tokens": 300
+      }
+    },
+    "0:3:REVIEW:1": {
+      "body": "{\"action\": \"request_tool\", \"name\": \"read_hunk\", \"arguments\": {\"hunk_id\": \"h0001\"}}",
+      "usage": {
+        "input_tokens": 250,
+        "output_tokens": 50,
+        "total_tokens": 300
+      }
+    },
+    "0:4:REVIEW:1": {
+      "body": "{\"action\":",
+      "usage": {
+        "input_tokens": 250,
+        "output_tokens": 50,
+        "total_tokens": 300
+      }
+    },
+    "0:4:REPAIR:1": {
+      "body": "{\"action\": \"submit_review\", \"findings\": []}",
+      "usage": {
+        "input_tokens": 250,
+        "output_tokens": 50,
+        "total_tokens": 300
+      }
+    }
+  }
+}

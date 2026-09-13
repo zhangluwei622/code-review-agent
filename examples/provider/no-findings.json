@@ -1,0 +1,11 @@
+{
+  "default": {
+    "body": "{\"action\":\"submit_review\",\"findings\":[],\"reason\":\"\"}",
+    "usage": {
+      "input_tokens": 250,
+      "output_tokens": 50,
+      "total_tokens": 300
+    },
+    "finish": "COMPLETE"
+  }
+}

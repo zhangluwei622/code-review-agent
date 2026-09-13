@@ -1,0 +1,968 @@
+{
+  "schema_version": 1,
+  "observations": [
+    {
+      "observation_id": "task_abb5ae51b3ee43be9d72193ca8e5450e",
+      "case_id": "empty-guard-removed",
+      "group_id": "empty_input",
+      "split": "development",
+      "input_digest": "cc2e04aec77235952468941d3b036f3572820031b97faad7d8649f7b1fe138c4",
+      "execution_mode": "fixture",
+      "started": true,
+      "task_id": "task_abb5ae51b3ee43be9d72193ca8e5450e",
+      "unit_states": [
+        "DONE"
+      ],
+      "reasons": [],
+      "findings": [
+        {
+          "actual_behavior": "len(values) 为 0，除法抛出 ZeroDivisionError。",
+          "candidate_index": 0,
+          "confidence": "high",
+          "confidence_reason": null,
+          "evidence": [
+            "h0001:old:3",
+            "h0001:old:4",
+            "h0001:new:3"
+          ],
+          "expectation_evidence": [
+            "h0001:new:2"
+          ],
+          "expected_behavior": "函数契约仍要求空列表返回 0。",
+          "hunk_id": "h0001",
+          "impact": "原本可处理的空列表输入变为异常，调用方会收到意外失败。",
+          "introduced_by": "本次删除了空列表提前返回分支，使空列表到达除法表达式。",
+          "line": 3,
+          "severity": "medium",
+          "side": "old",
+          "suggestion": "保留空列表保护，并增加 mean([]) 返回 0 的回归测试。",
+          "title": "删除空列表保护后会抛出 ZeroDivisionError",
+          "trigger": "调用 mean([])。",
+          "truncated_source": false,
+          "finding_id": "finding_2103963733767adcd8090ef2",
+          "result_ref": "result_57f992f78f869acf9bf43f89",
+          "validation_ref": "validation_daf88fe4aaa4b003dde571ac"
+        }
+      ],
+      "tools": [],
+      "retrieved_evidence": [],
+      "consumed_evidence": [],
+      "sends": 1,
+      "totals": {
+        "settled_tokens": 300,
+        "settled_cost_nusd": 350000,
+        "held_tokens": 0,
+        "held_cost_nusd": 0
+      },
+      "model_identity": {
+        "requested_model": "fixture",
+        "reported_models": [],
+        "actual_model_version": null,
+        "actual_model_version_evidence": null,
+        "system_fingerprints": [],
+        "prompt_digest": "b726e94f704659577b9c4caee029218c301da61b383ae15ca41b782f36f9a469",
+        "config_digest": "06bc202e3e48ba3d2bd92ef10863879a9484cd426c9c9a247a4d963ec78ecca9"
+      },
+      "pricing": {
+        "source": "tasks.config",
+        "currency": "USD",
+        "nano_usd_per_usd": 1000000000,
+        "pricing_source": "fixture",
+        "prompt_digest": "b726e94f704659577b9c4caee029218c301da61b383ae15ca41b782f36f9a469",
+        "policy_digest": "b36ef466d3b8ac5dc8bc3fbb0910040a9d81022e30c69b2de74e2cfa709acc8e",
+        "config_digest": "06bc202e3e48ba3d2bd92ef10863879a9484cd426c9c9a247a4d963ec78ecca9",
+        "limits": {
+          "max_tokens": 5000,
+          "max_cost_nusd": 10000000,
+          "max_output_tokens": 512,
+          "max_sends_per_unit": 6,
+          "max_repairs_per_unit": 1,
+          "max_tools_per_unit": 4
+        },
+        "repair_prompt_digest": "72ec9ae996b909d2e786782adacefd1db6db6643db502483f40d9824cd7f6a41",
+        "tool_registry_digest": "536fd562d860e0a0a3e15c4c3240fb80fd64204fdb30cb157c0187e603bebe59",
+        "price_unit": "nanoUSD/token",
+        "price_input_nusd": 1000,
+        "price_output_nusd": 2000
+      },
+      "source": {
+        "trace_digest": "3feec5d47d7b28a42d1dc465544b7c2252ac87e977da00212f2b14ca25107831",
+        "schema_version": 5,
+        "send_block": {
+          "reason": null,
+          "attempt_id": null
+        },
+        "post_tool_attempt_ids": [],
+        "post_tool_settled_tokens": 0,
+        "post_tool_settled_cost_nusd": 0,
+        "post_tool_held_tokens": 0,
+        "post_tool_held_cost_nusd": 0
+      }
+    },
+    {
+      "observation_id": "task_e0afc4c8faa44cc7966cbb3625fa639a",
+      "case_id": "empty-contract-changed",
+      "group_id": "empty_input",
+      "split": "development",
+      "input_digest": "72eed7779055c0d7beb6d5f0da2dc12a7a3ef40e7a1800678a94abcbd6aab92d",
+      "execution_mode": "fixture",
+      "started": true,
+      "task_id": "task_e0afc4c8faa44cc7966cbb3625fa639a",
+      "unit_states": [
+        "DONE"
+      ],
+      "reasons": [],
+      "findings": [],
+      "tools": [],
+      "retrieved_evidence": [],
+      "consumed_evidence": [],
+      "sends": 1,
+      "totals": {
+        "settled_tokens": 300,
+        "settled_cost_nusd": 350000,
+        "held_tokens": 0,
+        "held_cost_nusd": 0
+      },
+      "model_identity": {
+        "requested_model": "fixture",
+        "reported_models": [],
+        "actual_model_version": null,
+        "actual_model_version_evidence": null,
+        "system_fingerprints": [],
+        "prompt_digest": "b726e94f704659577b9c4caee029218c301da61b383ae15ca41b782f36f9a469",
+        "config_digest": "6d75cee44193a39365ab37155352e8b7d7586d14e29a4b9a9d1b6d2ebb7288c2"
+      },
+      "pricing": {
+        "source": "tasks.config",
+        "currency": "USD",
+        "nano_usd_per_usd": 1000000000,
+        "pricing_source": "fixture",
+        "prompt_digest": "b726e94f704659577b9c4caee029218c301da61b383ae15ca41b782f36f9a469",
+        "policy_digest": "b36ef466d3b8ac5dc8bc3fbb0910040a9d81022e30c69b2de74e2cfa709acc8e",
+        "config_digest": "6d75cee44193a39365ab37155352e8b7d7586d14e29a4b9a9d1b6d2ebb7288c2",
+        "limits": {
+          "max_tokens": 5000,
+          "max_cost_nusd": 10000000,
+          "max_output_tokens": 512,
+          "max_sends_per_unit": 6,
+          "max_repairs_per_unit": 1,
+          "max_tools_per_unit": 4
+        },
+        "repair_prompt_digest": "72ec9ae996b909d2e786782adacefd1db6db6643db502483f40d9824cd7f6a41",
+        "tool_registry_digest": "536fd562d860e0a0a3e15c4c3240fb80fd64204fdb30cb157c0187e603bebe59",
+        "price_unit": "nanoUSD/token",
+        "price_input_nusd": 1000,
+        "price_output_nusd": 2000
+      },
+      "source": {
+        "trace_digest": "356e2aa71a458e56d4a3802c54a26ba4f4fb12ef852907f9503e62b5ee8aae2e",
+        "schema_version": 5,
+        "send_block": {
+          "reason": null,
+          "attempt_id": null
+        },
+        "post_tool_attempt_ids": [],
+        "post_tool_settled_tokens": 0,
+        "post_tool_settled_cost_nusd": 0,
+        "post_tool_held_tokens": 0,
+        "post_tool_held_cost_nusd": 0
+      }
+    },
+    {
+      "observation_id": "task_e9d410f283e64564b3c6c84c213d96dc",
+      "case_id": "boundary-check-weakened",
+      "group_id": "index_boundary",
+      "split": "development",
+      "input_digest": "1d7dade97f28f56ee730a9342847547c6d0b124d1dd16d982cc91bcd578ea02f",
+      "execution_mode": "fixture",
+      "started": true,
+      "task_id": "task_e9d410f283e64564b3c6c84c213d96dc",
+      "unit_states": [
+        "ABSTAINED"
+      ],
+      "reasons": [
+        "Fixture protocol scenario; no semantic evaluation."
+      ],
+      "findings": [],
+      "tools": [],
+      "retrieved_evidence": [],
+      "consumed_evidence": [],
+      "sends": 1,
+      "totals": {
+        "settled_tokens": 300,
+        "settled_cost_nusd": 350000,
+        "held_tokens": 0,
+        "held_cost_nusd": 0
+      },
+      "model_identity": {
+        "requested_model": "fixture",
+        "reported_models": [],
+        "actual_model_version": null,
+        "actual_model_version_evidence": null,
+        "system_fingerprints": [],
+        "prompt_digest": "b726e94f704659577b9c4caee029218c301da61b383ae15ca41b782f36f9a469",
+        "config_digest": "86deea7ee7c4eb5bc89078ce56fd930818909183b1c385d23d72b979479798b3"
+      },
+      "pricing": {
+        "source": "tasks.config",
+        "currency": "USD",
+        "nano_usd_per_usd": 1000000000,
+        "pricing_source": "fixture",
+        "prompt_digest": "b726e94f704659577b9c4caee029218c301da61b383ae15ca41b782f36f9a469",
+        "policy_digest": "b36ef466d3b8ac5dc8bc3fbb0910040a9d81022e30c69b2de74e2cfa709acc8e",
+        "config_digest": "86deea7ee7c4eb5bc89078ce56fd930818909183b1c385d23d72b979479798b3",
+        "limits": {
+          "max_tokens": 5000,
+          "max_cost_nusd": 10000000,
+          "max_output_tokens": 512,
+          "max_sends_per_unit": 6,
+          "max_repairs_per_unit": 1,
+          "max_tools_per_unit": 4
+        },
+        "repair_prompt_digest": "72ec9ae996b909d2e786782adacefd1db6db6643db502483f40d9824cd7f6a41",
+        "tool_registry_digest": "536fd562d860e0a0a3e15c4c3240fb80fd64204fdb30cb157c0187e603bebe59",
+        "price_unit": "nanoUSD/token",
+        "price_input_nusd": 1000,
+        "price_output_nusd": 2000
+      },
+      "source": {
+        "trace_digest": "63fc40964c6f3adbf2f39ba6862981388551c43d21bfd7e5cfb07b9413d50887",
+        "schema_version": 5,
+        "send_block": {
+          "reason": null,
+          "attempt_id": null
+        },
+        "post_tool_attempt_ids": [],
+        "post_tool_settled_tokens": 0,
+        "post_tool_settled_cost_nusd": 0,
+        "post_tool_held_tokens": 0,
+        "post_tool_held_cost_nusd": 0
+      }
+    },
+    {
+      "observation_id": "task_bfdedc7b668f44449c1d7c4e77a01581",
+      "case_id": "boundary-check-corrected",
+      "group_id": "index_boundary",
+      "split": "development",
+      "input_digest": "8b0ca0c4e2482ea1ba83e77866c1aa47708a885c8a691d4f2a0d00480e875f82",
+      "execution_mode": "fixture",
+      "started": true,
+      "task_id": "task_bfdedc7b668f44449c1d7c4e77a01581",
+      "unit_states": [
+        "DONE"
+      ],
+      "reasons": [],
+      "findings": [],
+      "tools": [],
+      "retrieved_evidence": [],
+      "consumed_evidence": [],
+      "sends": 1,
+      "totals": {
+        "settled_tokens": 300,
+        "settled_cost_nusd": 350000,
+        "held_tokens": 0,
+        "held_cost_nusd": 0
+      },
+      "model_identity": {
+        "requested_model": "fixture",
+        "reported_models": [],
+        "actual_model_version": null,
+        "actual_model_version_evidence": null,
+        "system_fingerprints": [],
+        "prompt_digest": "b726e94f704659577b9c4caee029218c301da61b383ae15ca41b782f36f9a469",
+        "config_digest": "ace9362ddecf61e592ca8632c4edb7a997662bbdb12b1f5c8611af3c252df6aa"
+      },
+      "pricing": {
+        "source": "tasks.config",
+        "currency": "USD",
+        "nano_usd_per_usd": 1000000000,
+        "pricing_source": "fixture",
+        "prompt_digest": "b726e94f704659577b9c4caee029218c301da61b383ae15ca41b782f36f9a469",
+        "policy_digest": "b36ef466d3b8ac5dc8bc3fbb0910040a9d81022e30c69b2de74e2cfa709acc8e",
+        "config_digest": "ace9362ddecf61e592ca8632c4edb7a997662bbdb12b1f5c8611af3c252df6aa",
+        "limits": {
+          "max_tokens": 5000,
+          "max_cost_nusd": 10000000,
+          "max_output_tokens": 512,
+          "max_sends_per_unit": 6,
+          "max_repairs_per_unit": 1,
+          "max_tools_per_unit": 4
+        },
+        "repair_prompt_digest": "72ec9ae996b909d2e786782adacefd1db6db6643db502483f40d9824cd7f6a41",
+        "tool_registry_digest": "536fd562d860e0a0a3e15c4c3240fb80fd64204fdb30cb157c0187e603bebe59",
+        "price_unit": "nanoUSD/token",
+        "price_input_nusd": 1000,
+        "price_output_nusd": 2000
+      },
+      "source": {
+        "trace_digest": "9a42eb1a7e27244b7e5cf5409e0f8554fbfb3050e8e753a4160cddd13b4ee95c",
+        "schema_version": 5,
+        "send_block": {
+          "reason": null,
+          "attempt_id": null
+        },
+        "post_tool_attempt_ids": [],
+        "post_tool_settled_tokens": 0,
+        "post_tool_settled_cost_nusd": 0,
+        "post_tool_held_tokens": 0,
+        "post_tool_held_cost_nusd": 0
+      }
+    },
+    {
+      "observation_id": "task_2bb4631804684172a8618c76bfce26db",
+      "case_id": "parse-error-unhandled",
+      "group_id": "exception_contract",
+      "split": "development",
+      "input_digest": "4ea36fa3920612c405fe5e1f045a35f4f0486b52ba98a9b425b0d4a628f38003",
+      "execution_mode": "fixture",
+      "started": true,
+      "task_id": "task_2bb4631804684172a8618c76bfce26db",
+      "unit_states": [
+        "PAUSED_BUDGET"
+      ],
+      "reasons": [
+        "BUDGET_EXHAUSTED"
+      ],
+      "findings": [],
+      "tools": [],
+      "retrieved_evidence": [],
+      "consumed_evidence": [],
+      "sends": 0,
+      "totals": {
+        "settled_tokens": 0,
+        "settled_cost_nusd": 0,
+        "held_tokens": 0,
+        "held_cost_nusd": 0
+      },
+      "model_identity": {
+        "requested_model": "fixture",
+        "reported_models": [],
+        "actual_model_version": null,
+        "actual_model_version_evidence": null,
+        "system_fingerprints": [],
+        "prompt_digest": "b726e94f704659577b9c4caee029218c301da61b383ae15ca41b782f36f9a469",
+        "config_digest": "08d9ba4be5886fbaaeee644327ac66d4ecfe0870e0628d676e3d7deed926ed1c"
+      },
+      "pricing": {
+        "source": "tasks.config",
+        "currency": "USD",
+        "nano_usd_per_usd": 1000000000,
+        "pricing_source": "fixture",
+        "prompt_digest": "b726e94f704659577b9c4caee029218c301da61b383ae15ca41b782f36f9a469",
+        "policy_digest": "b36ef466d3b8ac5dc8bc3fbb0910040a9d81022e30c69b2de74e2cfa709acc8e",
+        "config_digest": "08d9ba4be5886fbaaeee644327ac66d4ecfe0870e0628d676e3d7deed926ed1c",
+        "limits": {
+          "max_tokens": 5000,
+          "max_cost_nusd": 10000000,
+          "max_output_tokens": 512,
+          "max_sends_per_unit": 6,
+          "max_repairs_per_unit": 1,
+          "max_tools_per_unit": 4
+        },
+        "repair_prompt_digest": "72ec9ae996b909d2e786782adacefd1db6db6643db502483f40d9824cd7f6a41",
+        "tool_registry_digest": "536fd562d860e0a0a3e15c4c3240fb80fd64204fdb30cb157c0187e603bebe59",
+        "price_unit": "nanoUSD/token",
+        "price_input_nusd": 1000,
+        "price_output_nusd": 2000
+      },
+      "source": {
+        "trace_digest": "70e26059b6b047b8a99e6d0b90f560e164dfabd6dfa17d45d9639a41a058112b",
+        "schema_version": 5,
+        "send_block": {
+          "reason": null,
+          "attempt_id": null
+        },
+        "post_tool_attempt_ids": [],
+        "post_tool_settled_tokens": 0,
+        "post_tool_settled_cost_nusd": 0,
+        "post_tool_held_tokens": 0,
+        "post_tool_held_cost_nusd": 0
+      }
+    },
+    {
+      "observation_id": "task_fee81d187c2043f39ddb5b4f955895dc",
+      "case_id": "intentional-exception-test",
+      "group_id": "exception_contract",
+      "split": "development",
+      "input_digest": "11f9c02db6daf8d857967bcbf3a53a44280bfc02819c6094d763839745f80af3",
+      "execution_mode": "fixture",
+      "started": true,
+      "task_id": "task_fee81d187c2043f39ddb5b4f955895dc",
+      "unit_states": [
+        "DONE"
+      ],
+      "reasons": [],
+      "findings": [],
+      "tools": [],
+      "retrieved_evidence": [],
+      "consumed_evidence": [],
+      "sends": 2,
+      "totals": {
+        "settled_tokens": 600,
+        "settled_cost_nusd": 700000,
+        "held_tokens": 0,
+        "held_cost_nusd": 0
+      },
+      "model_identity": {
+        "requested_model": "fixture",
+        "reported_models": [],
+        "actual_model_version": null,
+        "actual_model_version_evidence": null,
+        "system_fingerprints": [],
+        "prompt_digest": "b726e94f704659577b9c4caee029218c301da61b383ae15ca41b782f36f9a469",
+        "config_digest": "d1292f538394e78c800b33efda64a965c811d45aab162a6963ce5650001fd570"
+      },
+      "pricing": {
+        "source": "tasks.config",
+        "currency": "USD",
+        "nano_usd_per_usd": 1000000000,
+        "pricing_source": "fixture",
+        "prompt_digest": "b726e94f704659577b9c4caee029218c301da61b383ae15ca41b782f36f9a469",
+        "policy_digest": "b36ef466d3b8ac5dc8bc3fbb0910040a9d81022e30c69b2de74e2cfa709acc8e",
+        "config_digest": "d1292f538394e78c800b33efda64a965c811d45aab162a6963ce5650001fd570",
+        "limits": {
+          "max_tokens": 5000,
+          "max_cost_nusd": 10000000,
+          "max_output_tokens": 512,
+          "max_sends_per_unit": 6,
+          "max_repairs_per_unit": 1,
+          "max_tools_per_unit": 4
+        },
+        "repair_prompt_digest": "72ec9ae996b909d2e786782adacefd1db6db6643db502483f40d9824cd7f6a41",
+        "tool_registry_digest": "536fd562d860e0a0a3e15c4c3240fb80fd64204fdb30cb157c0187e603bebe59",
+        "price_unit": "nanoUSD/token",
+        "price_input_nusd": 1000,
+        "price_output_nusd": 2000
+      },
+      "source": {
+        "trace_digest": "378bf83f58e34cada815e8a201126834c10e1a6676ed0f6f5d1e3d1e7b66dcb9",
+        "schema_version": 5,
+        "send_block": {
+          "reason": null,
+          "attempt_id": null
+        },
+        "post_tool_attempt_ids": [],
+        "post_tool_settled_tokens": 0,
+        "post_tool_settled_cost_nusd": 0,
+        "post_tool_held_tokens": 0,
+        "post_tool_held_cost_nusd": 0
+      }
+    },
+    {
+      "observation_id": "task_705237c45fca4a9fbf79fbf2f4d80139",
+      "case_id": "caller-contract-context",
+      "group_id": "context_evidence",
+      "split": "development",
+      "input_digest": "9fce4759494fc4c6bc9df063798f67fa4bac258507f372db9eeb0d6da9db4032",
+      "execution_mode": "fixture",
+      "started": true,
+      "task_id": "task_705237c45fca4a9fbf79fbf2f4d80139",
+      "unit_states": [
+        "DONE"
+      ],
+      "reasons": [],
+      "findings": [],
+      "tools": [
+        {
+          "tool_call_id": "tool_call_0e24a9a855211b8825973ad9",
+          "name": "read_hunk",
+          "arguments": {
+            "hunk_id": "h0001"
+          },
+          "status": "SUCCEEDED",
+          "error_code": null,
+          "records": 9,
+          "repeated_arguments": false,
+          "retrieved_evidence": [
+            "h0001:new:1",
+            "h0001:new:2",
+            "h0001:new:3",
+            "h0001:new:4",
+            "h0001:new:5",
+            "h0001:new:6",
+            "h0001:new:7",
+            "h0001:new:8",
+            "h0001:old:1",
+            "h0001:old:2",
+            "h0001:old:3",
+            "h0001:old:4",
+            "h0001:old:5",
+            "h0001:old:6",
+            "h0001:old:7",
+            "h0001:old:8"
+          ],
+          "consumed_by_requests": [
+            "request_3276bd1a909b58624921934c",
+            "request_f7790c29d5b6296343cc09e9"
+          ],
+          "source_request_ref": "request_1415f6152de54f04ad50a669",
+          "request_ref": "tool_request_cb28bf6c57341888b29e73c5",
+          "result_ref": "tool_result_cb28bf6c57341888b29e73c5"
+        },
+        {
+          "tool_call_id": "tool_call_b000b4b1af25253abb35da39",
+          "name": "search_diff",
+          "arguments": {
+            "limit": 3,
+            "query": "nonempty"
+          },
+          "status": "SUCCEEDED",
+          "error_code": null,
+          "records": 1,
+          "repeated_arguments": false,
+          "retrieved_evidence": [
+            "h0001:new:1",
+            "h0001:old:1"
+          ],
+          "consumed_by_requests": [
+            "request_3276bd1a909b58624921934c"
+          ],
+          "source_request_ref": "request_f7790c29d5b6296343cc09e9",
+          "request_ref": "tool_request_80db8f8c4be9c400562c893c",
+          "result_ref": "tool_result_80db8f8c4be9c400562c893c"
+        }
+      ],
+      "retrieved_evidence": [
+        "h0001:new:1",
+        "h0001:new:2",
+        "h0001:new:3",
+        "h0001:new:4",
+        "h0001:new:5",
+        "h0001:new:6",
+        "h0001:new:7",
+        "h0001:new:8",
+        "h0001:old:1",
+        "h0001:old:2",
+        "h0001:old:3",
+        "h0001:old:4",
+        "h0001:old:5",
+        "h0001:old:6",
+        "h0001:old:7",
+        "h0001:old:8"
+      ],
+      "consumed_evidence": [
+        "h0001:new:1",
+        "h0001:new:2",
+        "h0001:new:3",
+        "h0001:new:4",
+        "h0001:new:5",
+        "h0001:new:6",
+        "h0001:new:7",
+        "h0001:new:8",
+        "h0001:old:1",
+        "h0001:old:2",
+        "h0001:old:3",
+        "h0001:old:4",
+        "h0001:old:5",
+        "h0001:old:6",
+        "h0001:old:7",
+        "h0001:old:8"
+      ],
+      "sends": 3,
+      "totals": {
+        "settled_tokens": 900,
+        "settled_cost_nusd": 1050000,
+        "held_tokens": 0,
+        "held_cost_nusd": 0
+      },
+      "model_identity": {
+        "requested_model": "fixture",
+        "reported_models": [],
+        "actual_model_version": null,
+        "actual_model_version_evidence": null,
+        "system_fingerprints": [],
+        "prompt_digest": "b726e94f704659577b9c4caee029218c301da61b383ae15ca41b782f36f9a469",
+        "config_digest": "fafa87a85bb9aba94f3655e6e352761399b7320df08c6b61db1f0ec56bf2120a"
+      },
+      "pricing": {
+        "source": "tasks.config",
+        "currency": "USD",
+        "nano_usd_per_usd": 1000000000,
+        "pricing_source": "fixture",
+        "prompt_digest": "b726e94f704659577b9c4caee029218c301da61b383ae15ca41b782f36f9a469",
+        "policy_digest": "b36ef466d3b8ac5dc8bc3fbb0910040a9d81022e30c69b2de74e2cfa709acc8e",
+        "config_digest": "fafa87a85bb9aba94f3655e6e352761399b7320df08c6b61db1f0ec56bf2120a",
+        "limits": {
+          "max_tokens": 5000,
+          "max_cost_nusd": 10000000,
+          "max_output_tokens": 512,
+          "max_sends_per_unit": 6,
+          "max_repairs_per_unit": 1,
+          "max_tools_per_unit": 4
+        },
+        "repair_prompt_digest": "72ec9ae996b909d2e786782adacefd1db6db6643db502483f40d9824cd7f6a41",
+        "tool_registry_digest": "536fd562d860e0a0a3e15c4c3240fb80fd64204fdb30cb157c0187e603bebe59",
+        "price_unit": "nanoUSD/token",
+        "price_input_nusd": 1000,
+        "price_output_nusd": 2000
+      },
+      "source": {
+        "trace_digest": "6c2114ce5208b11204b5a0bdda39c22f9c696c40cd89fc86b513a51e36fc02c0",
+        "schema_version": 5,
+        "send_block": {
+          "reason": null,
+          "attempt_id": null
+        },
+        "post_tool_attempt_ids": [
+          "attempt_72f2a6633aa3a1854f0716a9",
+          "attempt_73f375cfe95fd3c7709ff3fa"
+        ],
+        "post_tool_settled_tokens": 600,
+        "post_tool_settled_cost_nusd": 700000,
+        "post_tool_held_tokens": 0,
+        "post_tool_held_cost_nusd": 0
+      }
+    },
+    {
+      "observation_id": "task_3284f401a58640f3873ea90689dcc1ef",
+      "case_id": "performance-context-missing",
+      "group_id": "context_evidence",
+      "split": "development",
+      "input_digest": "0f99c1de55fb19ef4b4c51f33b2b77c03ed266f9cb3581d63e4093e5709fa8f6",
+      "execution_mode": "fixture",
+      "started": true,
+      "task_id": "task_3284f401a58640f3873ea90689dcc1ef",
+      "unit_states": [
+        "ABSTAINED"
+      ],
+      "reasons": [
+        "Fixture protocol scenario; no semantic evaluation."
+      ],
+      "findings": [],
+      "tools": [],
+      "retrieved_evidence": [],
+      "consumed_evidence": [],
+      "sends": 1,
+      "totals": {
+        "settled_tokens": 300,
+        "settled_cost_nusd": 350000,
+        "held_tokens": 0,
+        "held_cost_nusd": 0
+      },
+      "model_identity": {
+        "requested_model": "fixture",
+        "reported_models": [],
+        "actual_model_version": null,
+        "actual_model_version_evidence": null,
+        "system_fingerprints": [],
+        "prompt_digest": "b726e94f704659577b9c4caee029218c301da61b383ae15ca41b782f36f9a469",
+        "config_digest": "7429a811354ea88fcbfeb1627a948e7b1418b38ef01c66830b3b9808fb8c5060"
+      },
+      "pricing": {
+        "source": "tasks.config",
+        "currency": "USD",
+        "nano_usd_per_usd": 1000000000,
+        "pricing_source": "fixture",
+        "prompt_digest": "b726e94f704659577b9c4caee029218c301da61b383ae15ca41b782f36f9a469",
+        "policy_digest": "b36ef466d3b8ac5dc8bc3fbb0910040a9d81022e30c69b2de74e2cfa709acc8e",
+        "config_digest": "7429a811354ea88fcbfeb1627a948e7b1418b38ef01c66830b3b9808fb8c5060",
+        "limits": {
+          "max_tokens": 5000,
+          "max_cost_nusd": 10000000,
+          "max_output_tokens": 512,
+          "max_sends_per_unit": 6,
+          "max_repairs_per_unit": 1,
+          "max_tools_per_unit": 4
+        },
+        "repair_prompt_digest": "72ec9ae996b909d2e786782adacefd1db6db6643db502483f40d9824cd7f6a41",
+        "tool_registry_digest": "536fd562d860e0a0a3e15c4c3240fb80fd64204fdb30cb157c0187e603bebe59",
+        "price_unit": "nanoUSD/token",
+        "price_input_nusd": 1000,
+        "price_output_nusd": 2000
+      },
+      "source": {
+        "trace_digest": "31426459f5ce4df4f199e3fb154225dac8dd1ac7558c4f62498a20e7051367dd",
+        "schema_version": 5,
+        "send_block": {
+          "reason": null,
+          "attempt_id": null
+        },
+        "post_tool_attempt_ids": [],
+        "post_tool_settled_tokens": 0,
+        "post_tool_settled_cost_nusd": 0,
+        "post_tool_held_tokens": 0,
+        "post_tool_held_cost_nusd": 0
+      }
+    },
+    {
+      "observation_id": "task_6a3ea957d4774a0a9ce5ca8df6c46c34",
+      "case_id": "null-guard-removed",
+      "group_id": "nullable_record",
+      "split": "holdout",
+      "input_digest": "1d98b200e3716f8cda89a7acf09457d068ac0593b03fe6e42b5af85441c5a850",
+      "execution_mode": "fixture",
+      "started": true,
+      "task_id": "task_6a3ea957d4774a0a9ce5ca8df6c46c34",
+      "unit_states": [
+        "PAUSED_UNKNOWN"
+      ],
+      "reasons": [
+        "PROVIDER_UNKNOWN"
+      ],
+      "findings": [],
+      "tools": [],
+      "retrieved_evidence": [],
+      "consumed_evidence": [],
+      "sends": 1,
+      "totals": {
+        "settled_tokens": 0,
+        "settled_cost_nusd": 0,
+        "held_tokens": 600,
+        "held_cost_nusd": 800000
+      },
+      "model_identity": {
+        "requested_model": "fixture",
+        "reported_models": [],
+        "actual_model_version": null,
+        "actual_model_version_evidence": null,
+        "system_fingerprints": [],
+        "prompt_digest": "b726e94f704659577b9c4caee029218c301da61b383ae15ca41b782f36f9a469",
+        "config_digest": "1b25f223182248e91272692491ad26612cebfb42bd2d745190b648da8d78d486"
+      },
+      "pricing": {
+        "source": "tasks.config",
+        "currency": "USD",
+        "nano_usd_per_usd": 1000000000,
+        "pricing_source": "fixture",
+        "prompt_digest": "b726e94f704659577b9c4caee029218c301da61b383ae15ca41b782f36f9a469",
+        "policy_digest": "b36ef466d3b8ac5dc8bc3fbb0910040a9d81022e30c69b2de74e2cfa709acc8e",
+        "config_digest": "1b25f223182248e91272692491ad26612cebfb42bd2d745190b648da8d78d486",
+        "limits": {
+          "max_tokens": 5000,
+          "max_cost_nusd": 10000000,
+          "max_output_tokens": 512,
+          "max_sends_per_unit": 6,
+          "max_repairs_per_unit": 1,
+          "max_tools_per_unit": 4
+        },
+        "repair_prompt_digest": "72ec9ae996b909d2e786782adacefd1db6db6643db502483f40d9824cd7f6a41",
+        "tool_registry_digest": "536fd562d860e0a0a3e15c4c3240fb80fd64204fdb30cb157c0187e603bebe59",
+        "price_unit": "nanoUSD/token",
+        "price_input_nusd": 1000,
+        "price_output_nusd": 2000
+      },
+      "source": {
+        "trace_digest": "acd12786ace38426ceb51d22c465bf21d2333ffae996928283f2296303d6fbab",
+        "schema_version": 5,
+        "send_block": {
+          "reason": null,
+          "attempt_id": null
+        },
+        "post_tool_attempt_ids": [],
+        "post_tool_settled_tokens": 0,
+        "post_tool_settled_cost_nusd": 0,
+        "post_tool_held_tokens": 0,
+        "post_tool_held_cost_nusd": 0
+      }
+    },
+    {
+      "observation_id": "task_ce9977fe971c46809ca7cfa4b6b60778",
+      "case_id": "null-guard-equivalent",
+      "group_id": "nullable_record",
+      "split": "holdout",
+      "input_digest": "d4b43dac4990056874bfcb5b4144256b1b5d987819d858d3d6be5944cbdd46b5",
+      "execution_mode": "fixture",
+      "started": true,
+      "task_id": "task_ce9977fe971c46809ca7cfa4b6b60778",
+      "unit_states": [
+        "DONE"
+      ],
+      "reasons": [],
+      "findings": [],
+      "tools": [],
+      "retrieved_evidence": [],
+      "consumed_evidence": [],
+      "sends": 1,
+      "totals": {
+        "settled_tokens": 300,
+        "settled_cost_nusd": 350000,
+        "held_tokens": 0,
+        "held_cost_nusd": 0
+      },
+      "model_identity": {
+        "requested_model": "fixture",
+        "reported_models": [],
+        "actual_model_version": null,
+        "actual_model_version_evidence": null,
+        "system_fingerprints": [],
+        "prompt_digest": "b726e94f704659577b9c4caee029218c301da61b383ae15ca41b782f36f9a469",
+        "config_digest": "b9d4de36b1c66b13ca4a2c4da6849aa591abdb150a39613c873819ebfd21cfd5"
+      },
+      "pricing": {
+        "source": "tasks.config",
+        "currency": "USD",
+        "nano_usd_per_usd": 1000000000,
+        "pricing_source": "fixture",
+        "prompt_digest": "b726e94f704659577b9c4caee029218c301da61b383ae15ca41b782f36f9a469",
+        "policy_digest": "b36ef466d3b8ac5dc8bc3fbb0910040a9d81022e30c69b2de74e2cfa709acc8e",
+        "config_digest": "b9d4de36b1c66b13ca4a2c4da6849aa591abdb150a39613c873819ebfd21cfd5",
+        "limits": {
+          "max_tokens": 5000,
+          "max_cost_nusd": 10000000,
+          "max_output_tokens": 512,
+          "max_sends_per_unit": 6,
+          "max_repairs_per_unit": 1,
+          "max_tools_per_unit": 4
+        },
+        "repair_prompt_digest": "72ec9ae996b909d2e786782adacefd1db6db6643db502483f40d9824cd7f6a41",
+        "tool_registry_digest": "536fd562d860e0a0a3e15c4c3240fb80fd64204fdb30cb157c0187e603bebe59",
+        "price_unit": "nanoUSD/token",
+        "price_input_nusd": 1000,
+        "price_output_nusd": 2000
+      },
+      "source": {
+        "trace_digest": "03972112c182d058e7a9122ab39b9393e505d1d15c011f98c8e84cacd3791267",
+        "schema_version": 5,
+        "send_block": {
+          "reason": null,
+          "attempt_id": null
+        },
+        "post_tool_attempt_ids": [],
+        "post_tool_settled_tokens": 0,
+        "post_tool_settled_cost_nusd": 0,
+        "post_tool_held_tokens": 0,
+        "post_tool_held_cost_nusd": 0
+      }
+    },
+    {
+      "observation_id": "task_e36279ba2cc445a388815dbd57bdd95c",
+      "case_id": "return-statement-removed",
+      "group_id": "return_contract",
+      "split": "holdout",
+      "input_digest": "0fb53275ef7f760b3bb6f502a9f39047191ab45a959cc537a64a7ee9bb33733a",
+      "execution_mode": "fixture",
+      "started": true,
+      "task_id": "task_e36279ba2cc445a388815dbd57bdd95c",
+      "unit_states": [
+        "PARTIAL_TRUNCATED"
+      ],
+      "reasons": [
+        "PROVIDER_OUTPUT_LIMIT"
+      ],
+      "findings": [],
+      "tools": [],
+      "retrieved_evidence": [],
+      "consumed_evidence": [],
+      "sends": 1,
+      "totals": {
+        "settled_tokens": 300,
+        "settled_cost_nusd": 350000,
+        "held_tokens": 0,
+        "held_cost_nusd": 0
+      },
+      "model_identity": {
+        "requested_model": "fixture",
+        "reported_models": [],
+        "actual_model_version": null,
+        "actual_model_version_evidence": null,
+        "system_fingerprints": [],
+        "prompt_digest": "b726e94f704659577b9c4caee029218c301da61b383ae15ca41b782f36f9a469",
+        "config_digest": "d13e60ac209c69b2737364b8981025bda7998a38163fb50a262d5ec0465cbbad"
+      },
+      "pricing": {
+        "source": "tasks.config",
+        "currency": "USD",
+        "nano_usd_per_usd": 1000000000,
+        "pricing_source": "fixture",
+        "prompt_digest": "b726e94f704659577b9c4caee029218c301da61b383ae15ca41b782f36f9a469",
+        "policy_digest": "b36ef466d3b8ac5dc8bc3fbb0910040a9d81022e30c69b2de74e2cfa709acc8e",
+        "config_digest": "d13e60ac209c69b2737364b8981025bda7998a38163fb50a262d5ec0465cbbad",
+        "limits": {
+          "max_tokens": 5000,
+          "max_cost_nusd": 10000000,
+          "max_output_tokens": 512,
+          "max_sends_per_unit": 6,
+          "max_repairs_per_unit": 1,
+          "max_tools_per_unit": 4
+        },
+        "repair_prompt_digest": "72ec9ae996b909d2e786782adacefd1db6db6643db502483f40d9824cd7f6a41",
+        "tool_registry_digest": "536fd562d860e0a0a3e15c4c3240fb80fd64204fdb30cb157c0187e603bebe59",
+        "price_unit": "nanoUSD/token",
+        "price_input_nusd": 1000,
+        "price_output_nusd": 2000
+      },
+      "source": {
+        "trace_digest": "9ba2c3516919e94c18017e3d5138a2e6101ef11b86dd40ff1b6a1eb35d875f21",
+        "schema_version": 5,
+        "send_block": {
+          "reason": null,
+          "attempt_id": null
+        },
+        "post_tool_attempt_ids": [],
+        "post_tool_settled_tokens": 0,
+        "post_tool_settled_cost_nusd": 0,
+        "post_tool_held_tokens": 0,
+        "post_tool_held_cost_nusd": 0
+      }
+    },
+    {
+      "observation_id": "task_1999def56e41438bb9e89fca46e719e3",
+      "case_id": "return-inline-equivalent",
+      "group_id": "return_contract",
+      "split": "holdout",
+      "input_digest": "eeefeedfa7331daf39e0de5c5664f1005281dee8d9ff90f3abdbfafd79cd378e",
+      "execution_mode": "fixture",
+      "started": true,
+      "task_id": "task_1999def56e41438bb9e89fca46e719e3",
+      "unit_states": [
+        "DONE"
+      ],
+      "reasons": [],
+      "findings": [],
+      "tools": [],
+      "retrieved_evidence": [],
+      "consumed_evidence": [],
+      "sends": 1,
+      "totals": {
+        "settled_tokens": 300,
+        "settled_cost_nusd": 350000,
+        "held_tokens": 0,
+        "held_cost_nusd": 0
+      },
+      "model_identity": {
+        "requested_model": "fixture",
+        "reported_models": [],
+        "actual_model_version": null,
+        "actual_model_version_evidence": null,
+        "system_fingerprints": [],
+        "prompt_digest": "b726e94f704659577b9c4caee029218c301da61b383ae15ca41b782f36f9a469",
+        "config_digest": "028d600acc35d863fc89d1ac0a98dd762bdc6d87218a51b4b68524144e4a2179"
+      },
+      "pricing": {
+        "source": "tasks.config",
+        "currency": "USD",
+        "nano_usd_per_usd": 1000000000,
+        "pricing_source": "fixture",
+        "prompt_digest": "b726e94f704659577b9c4caee029218c301da61b383ae15ca41b782f36f9a469",
+        "policy_digest": "b36ef466d3b8ac5dc8bc3fbb0910040a9d81022e30c69b2de74e2cfa709acc8e",
+        "config_digest": "028d600acc35d863fc89d1ac0a98dd762bdc6d87218a51b4b68524144e4a2179",
+        "limits": {
+          "max_tokens": 5000,
+          "max_cost_nusd": 10000000,
+          "max_output_tokens": 512,
+          "max_sends_per_unit": 6,
+          "max_repairs_per_unit": 1,
+          "max_tools_per_unit": 4
+        },
+        "repair_prompt_digest": "72ec9ae996b909d2e786782adacefd1db6db6643db502483f40d9824cd7f6a41",
+        "tool_registry_digest": "536fd562d860e0a0a3e15c4c3240fb80fd64204fdb30cb157c0187e603bebe59",
+        "price_unit": "nanoUSD/token",
+        "price_input_nusd": 1000,
+        "price_output_nusd": 2000
+      },
+      "source": {
+        "trace_digest": "3f70f6d1a8f44b8c1182f8e97c455496f4a43828d732f42bdf2c2de818ac7911",
+        "schema_version": 5,
+        "send_block": {
+          "reason": null,
+          "attempt_id": null
+        },
+        "post_tool_attempt_ids": [],
+        "post_tool_settled_tokens": 0,
+        "post_tool_settled_cost_nusd": 0,
+        "post_tool_held_tokens": 0,
+        "post_tool_held_cost_nusd": 0
+      }
+    }
+  ]
+}

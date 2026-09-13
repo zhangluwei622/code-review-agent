@@ -1,0 +1,73 @@
+{
+  "name": "search_diff",
+  "version": "1.0.0",
+  "handler_id": "search_diff",
+  "description": "Literal case-sensitive search in the full current-unit diff, including omitted context. A more_matches record marks a search result limit.",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "query": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 200
+      },
+      "limit": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 50
+      }
+    },
+    "required": [
+      "query",
+      "limit"
+    ],
+    "additionalProperties": false
+  },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "hunk_id": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 64
+      },
+      "kind": {
+        "type": "string",
+        "maxLength": 1,
+        "enum": [
+          " ",
+          "+",
+          "-"
+        ]
+      },
+      "old_lineno": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 2147483647
+      },
+      "new_lineno": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 2147483647
+      },
+      "text": {
+        "type": "string",
+        "minLength": 0,
+        "maxLength": 65536
+      },
+      "redacted": {
+        "type": "boolean"
+      },
+      "more_matches": {
+        "type": "boolean"
+      }
+    },
+    "required": [],
+    "additionalProperties": false
+  },
+  "permissions": [
+    "unit.hunks"
+  ],
+  "timeout_ms": 2000,
+  "max_output_bytes": 32768
+}

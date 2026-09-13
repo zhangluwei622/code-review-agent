@@ -1,0 +1,11 @@
+{
+  "default": {
+    "body": "{\"action\":\"abstain\",\"findings\":[],\"reason\":\"缺少调用方和业务契约，不能形成可靠结论。\"}",
+    "usage": {
+      "input_tokens": 250,
+      "output_tokens": 50,
+      "total_tokens": 300
+    },
+    "finish": "COMPLETE"
+  }
+}

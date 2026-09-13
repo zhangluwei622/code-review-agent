@@ -1,0 +1,13 @@
+diff --git a/context.py b/context.py
+--- a/context.py
++++ b/context.py
+@@ -1,8 +1,8 @@
+ # callers guarantee a nonempty sequence
+ # omitted context must be fetched explicitly
+ def avg(values):
+     total = sum(values)
+-    count = max(1, len(values))
++    count = len(values)
+     return total / count
+ # trailer
+ # context outside the first preview

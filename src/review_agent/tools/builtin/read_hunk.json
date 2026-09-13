@@ -1,0 +1,71 @@
+{
+  "name": "read_hunk",
+  "version": "1.0.0",
+  "handler_id": "read_hunk",
+  "description": "Read all lines of a current-unit hunk from the frozen diff, including context omitted from the first request. Context outside the supplied diff is unavailable.",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "hunk_id": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 64
+      }
+    },
+    "required": [
+      "hunk_id"
+    ],
+    "additionalProperties": false
+  },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "hunk_id": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 64
+      },
+      "kind": {
+        "type": "string",
+        "maxLength": 1,
+        "enum": [
+          " ",
+          "+",
+          "-"
+        ]
+      },
+      "old_lineno": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 2147483647
+      },
+      "new_lineno": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 2147483647
+      },
+      "text": {
+        "type": "string",
+        "minLength": 0,
+        "maxLength": 65536
+      },
+      "redacted": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "hunk_id",
+      "kind",
+      "old_lineno",
+      "new_lineno",
+      "text",
+      "redacted"
+    ],
+    "additionalProperties": false
+  },
+  "permissions": [
+    "unit.hunks"
+  ],
+  "timeout_ms": 2000,
+  "max_output_bytes": 32768
+}

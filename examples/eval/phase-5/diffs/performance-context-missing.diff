@@ -1,0 +1,10 @@
+diff --git a/sample.py b/sample.py
+--- a/sample.py
++++ b/sample.py
+@@ -0,0 +1,6 @@
++def count_pairs(values):
++    total = 0
++    for left in values:
++        for right in values:
++            total += left == right
++    return total

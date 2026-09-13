@@ -1,0 +1,10 @@
+{
+  "default": {
+    "body": "{\"action\": \"abstain\", \"reason\": \"Fixture protocol scenario; no semantic evaluation.\", \"findings\": []}",
+    "usage": {
+      "input_tokens": 250,
+      "output_tokens": 50,
+      "total_tokens": 300
+    }
+  }
+}

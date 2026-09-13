@@ -1,0 +1,104 @@
+[
+  {
+    "fixture": "traces/deepseek-live-low-output-limit.json",
+    "sha256": "18e1ea48d47bc34921041f34d770cff7050bf78bb505be766f22158462f219e0",
+    "source_workspace_relative": "examples/traces/deepseek-live-low-output-limit.json",
+    "copied_without_content_changes": true
+  },
+  {
+    "fixture": "traces/deepseek-live-low-output-pricing-review.json",
+    "sha256": "9797b84c5c57e6ecdfb80582cd0726f05aeb74588babd711f167cb273ff17a5d",
+    "source_workspace_relative": "examples/traces/deepseek-live-low-output-pricing-review.json",
+    "copied_without_content_changes": true
+  },
+  {
+    "fixture": "traces/deepseek-live-pricing-review.json",
+    "sha256": "94678fc61bc36e3e9727a4244f16672cfc9f20c5bb9d06342ceb21b1435be617",
+    "source_workspace_relative": "examples/traces/deepseek-live-pricing-review.json",
+    "copied_without_content_changes": true
+  },
+  {
+    "fixture": "traces/deepseek-live.json",
+    "sha256": "80c74295b1e77f2e3a3d6d70569ce7d8128262eb4f8a2c9c73df0aff3e3c565e",
+    "source_workspace_relative": "examples/traces/deepseek-live.json",
+    "copied_without_content_changes": true
+  },
+  {
+    "fixture": "traces/phase-3-repair.json",
+    "sha256": "757720e4f7a2a7addb0f13c9edb59d5c5ee2febc29b8968df3b93f7dd06a3a31",
+    "source_workspace_relative": "examples/traces/phase-3-repair.json",
+    "copied_without_content_changes": true
+  },
+  {
+    "fixture": "traces/phase-3-retry.json",
+    "sha256": "fe1d6cccdedc822a136808bcc102a3390a2f324607d3cb3b0f846329410233a4",
+    "source_workspace_relative": "examples/traces/phase-3-retry.json",
+    "copied_without_content_changes": true
+  },
+  {
+    "fixture": "traces/phase-4-tool-retry.json",
+    "sha256": "20f8eb1aaf151e74e831c7e26801096b13501c39f0a131a3145b54ad007a1920",
+    "source_workspace_relative": "examples/traces/phase-4-tool-retry.json",
+    "copied_without_content_changes": true
+  },
+  {
+    "fixture": "traces/phase-4-tools.json",
+    "sha256": "51b625531c41278cbbadb1a0baec289c437851b65a66b93131064188515534ee",
+    "source_workspace_relative": "examples/traces/phase-4-tools.json",
+    "copied_without_content_changes": true
+  },
+  {
+    "fixture": "traces/sanitized.json",
+    "sha256": "8e966118fb9b18da088a604c0bcd7d1ce3e8bc5a6bca4b62c16c8f1333189c36",
+    "source_workspace_relative": "examples/traces/sanitized.json",
+    "copied_without_content_changes": true
+  },
+  {
+    "fixture": "traces/success.json",
+    "sha256": "7d8a894497e7f3037604b1bc083e23baeb67b9a884b0edac926e84b5914cf2f0",
+    "source_workspace_relative": "examples/traces/success.json",
+    "copied_without_content_changes": true
+  },
+  {
+    "fixture": "traces/unknown.json",
+    "sha256": "1e3c5a0e83b2ebd44ef91baf7555f6a466da6aebb567bcd69c90a6894e2e4cf7",
+    "source_workspace_relative": "examples/traces/unknown.json",
+    "copied_without_content_changes": true
+  },
+  {
+    "fixture": "source-github.json",
+    "sha256": "1ca10b3fd091d6b9d2b485f873bb953e35102b8dbf7edd049abb005c99b325cc",
+    "source_workspace_relative": "examples/reports/phase-6-url/github.trace.json",
+    "copied_without_content_changes": true
+  },
+  {
+    "fixture": "evaluation/historical-observations.json",
+    "sha256": "b20356bbd791c4175b94993e941d87dde6dc9c1f8e10ec5de7e6afc4536ade7f",
+    "source_workspace_relative": "examples/eval/phase-5/historical-observations.json",
+    "copied_without_content_changes": true
+  },
+  {
+    "fixture": "evaluation/fixture-observations.json",
+    "sha256": "4765b53b797a7c7ee3d05f864e031df7853d9e18dc098c38a75e8851ed80f35c",
+    "source_workspace_relative": "examples/eval/phase-5/fixture-observations.json",
+    "copied_without_content_changes": true
+  },
+  {
+    "fixture": "evaluation/original-annotations.md",
+    "sha256": "8257b407bd95d50c48cee2280247ddafd3204a0b8757ea284962814091ba64b5",
+    "source_workspace_relative": "examples/eval/phase-5/review/c6d4d9edca5e9c80ca45525a48f20c0c36312fc17cb3e92efa4d288f71175f99/annotations.md",
+    "copied_without_content_changes": true
+  },
+  {
+    "fixture": "review-tools-semantic-s2-frozen.md",
+    "sha256": "7a601f4ff2060b16f6adfd1b3e20d7dee16fb49241d41bd71fd4b83513efae97",
+    "source_workspace_relative": "experiments/phase5-semantic-s2/runtime/src/review_agent/prompts/review-tools.md",
+    "copied_without_content_changes": true
+  },
+  {
+    "fixture": "duplicate-findings-legacy.txt",
+    "sha256": "999e8c789c6eed8f4a68784c2fa2382c64055405b3dc8c78fcb54cadcfb251a3",
+    "source_workspace_relative": "experiments/phase5-s2-holdout/judging/300ec07fb5fefab3c94f7976d6d21dfd00e86a51e80576466acebe47340da28a/raw/return-statement-removed-turn-1.txt",
+    "copied_without_content_changes": true
+  }
+]
