@@ -10,7 +10,7 @@
 - **在线审阅**：页面设置 DeepSeek API key，提交自己的 diff 或公开 PR/MR；也支持 CLI。默认模型为 `deepseek-flash`，页面不提供任意接口或模型切换。
 - **单 Agent 工具循环**：`list_changed_files`、`read_hunk`、`search_diff` 读取安全快照，补取首轮省略的 diff 内上下文；工具名额耗尽后仍可总结。
 - **故障恢复**：checkpoint、持久化调用结果、独立 REPAIR operation，以及 UNKNOWN 后的明确人工重试。
-- **可观测报告**：评论关联请求、原安全回复、证据、预算和调用关系；下载 Markdown、trace JSON、独立只读 HTML。
+- **两类报告**：中文代码报告先展示文件和行号，只列问题、影响及修改建议；执行明细另列消耗、工具、恢复和证据关联，并可下载 trace JSON、独立只读 HTML。
 - **离线评估**：按场景组划分开发集／留出集，支持 fixture 流程验证、人工标注与判分；不使用 LLM-as-judge。
 
 ## 快速启动
@@ -86,7 +86,9 @@ uv run review-agent trace --task task_… --state-dir .review-agent/cli-demo > t
 uv run review-agent view --trace trace.json --output review.html
 ```
 
-`trace --finding FINDING_ID` 可追溯具体评论；`report --task task_… --state-dir ... --output report.md` 可重新导出报告。`view` 仅读取安全 trace，不访问任务库或调用模型。
+`review`、`resume` 和 `report` 同时生成 `report.md`（简洁代码报告）与 `report.audit.md`（执行明细）；指定其他输出名时，明细使用同名 `.audit.md` 后缀。前端分别提供“代码报告”和“执行明细”下载，代码报告区不展示消耗或工具调用。
+
+`trace --finding FINDING_ID` 可追溯具体评论；`report --task task_… --state-dir ... --output report.md` 可重新导出两份报告。`view` 仅读取安全 trace，不访问任务库或调用模型。历史冻结评估导出仍保留原格式。
 
 UNKNOWN 表示请求可能已发出但结果不明，普通 `resume` 不重发。明确接受新增调用时才使用 `resume --task task_… --state-dir ... --retry-unknown attempt_…`；原 UNKNOWN 的 HELD 继续保留，新 attempt 再次 UNKNOWN 需要新的明确选择。重复提交同一重试选择复用既有绑定。
 

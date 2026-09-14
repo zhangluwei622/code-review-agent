@@ -6,7 +6,7 @@ from test_ledger_gateway import reserve
 
 from review_agent import app
 from review_agent.contracts import AgentError, StoredResult
-from review_agent.report import exit_code, render, write_report
+from review_agent.report import exit_code, render, render_audit, render_review, write_report
 
 
 @pytest.mark.parametrize(
@@ -186,3 +186,58 @@ def test_intentional_exception_fixture_is_not_a_quality_claim(harness):
     assert data["units"][0]["status"] == "DONE"
     assert not data["findings"]
     assert "不代表模型审阅质量" in render(data)
+
+
+@pytest.mark.parametrize("scenario", [
+    "success", "no-findings", "abstain", "truncated-valid", "malformed",
+])
+def test_concise_review_separates_code_from_audit_and_preserves_status(harness, scenario):
+    harness.create(scenario)
+    data = harness.run()
+    review, audit = render_review(data), render_audit(data)
+    assert review.startswith("# 代码审阅报告")
+    for operational in ("调用账本", "Trace", "tokens", "USD", "任务与覆盖", "HELD"):
+        assert operational not in review
+    assert "调用账本" in audit and "任务与覆盖" in audit
+    assert "执行与审计明细" in audit
+    if scenario == "success":
+        assert "stats.py · 变更前第 3 行" in review
+        assert review.index("stats.py") < review.index("- 问题：") < review.index("- 修改建议：")
+        assert "严重性：中；置信度：高" in review
+    elif scenario == "no-findings":
+        assert "已完成本轮审阅" in review and "本次未报告正式代码问题" in review
+    else:
+        assert "审阅尚未完整结束" in review
+    if scenario == "truncated-valid":
+        assert "本次未报告正式代码问题" in review and not data["findings"]
+    assert harness.read() == data
+
+
+def test_concise_review_keeps_reference_distinct_and_escapes_text(harness, success_spec):
+    reply = success_spec["responses"]["0:0:REVIEW:1"]
+    decision = json.loads(reply["body"])
+    finding = decision["findings"][0]
+    finding["expectation_evidence"] = []
+    finding["title"] = '<img src="https://bad.invalid/">'
+    finding["suggestion"] = "[click](https://bad.invalid/)"
+    reply["body"] = json.dumps(decision)
+    harness.create(spec=success_spec)
+    data = harness.run()
+    review = render_review(data)
+    assert "本次未报告正式代码问题" in review
+    assert "仅供参考（尚未确认为缺陷）" in review
+    assert "<img" not in review and "https://" not in review
+    assert "&#58;//" in review
+    assert harness.read() == data
+
+
+def test_concise_review_keeps_accepted_truncated_finding_without_promoting_completion(
+    harness, success_spec,
+):
+    success_spec["responses"]["0:0:REVIEW:1"]["finish"] = "OUTPUT_LIMIT"
+    harness.create(spec=success_spec)
+    data = harness.run()
+    review = render_review(data)
+    assert "stats.py · 变更前第 3 行" in review
+    assert "该条来自截断回复" in review and "审阅尚未完整结束" in review
+    assert len(data["findings"]) == 1 and harness.read() == data

@@ -69,7 +69,13 @@ def test_submission_runs_core_and_exports_same_facts(desk, demo, sends, tools, s
             "RUNNING", "SUCCEEDED",
         }
     original = desk.snapshot(job["job_id"])
-    assert status.encode() in desk.download(job["job_id"], "report.md")[0]
+    review = desk.download(job["job_id"], "report.md")[0].decode()
+    assert review.startswith("# 代码审阅报告") and "调用账本" not in review
+    assert status.encode() in desk.download(job["job_id"], "audit.md")[0]
+    assert detail["hunk_paths"] == {
+        hunk_id: unit["path"]
+        for unit in original["units"] for hunk_id in unit["hunk_ids"]
+    }
     trace = json.loads(desk.download(job["job_id"], "trace.json")[0])
     observed = trace.pop("workbench")
     assert observed["events"] == detail["events"] and observed["task_status"] == status
@@ -338,6 +344,8 @@ def test_http_create_poll_download_and_static_csp(desk):
     code, _, body = request(desk, f"/api/jobs/{job}")
     assert code == 200 and json.loads(body)["summary"]["status"] == "COMPLETED"
     code, headers, body = request(desk, f"/api/jobs/{job}/report.md")
+    assert code == 200 and b"attachment" in headers and "代码审阅报告" in body.decode()
+    code, headers, body = request(desk, f"/api/jobs/{job}/audit.md")
     assert code == 200 and b"attachment" in headers and b"COMPLETED" in body
     assert request(desk, "/api/jobs/../../private")[0] == 404
     assert request(desk, "/../../pyproject.toml")[0] == 404
@@ -348,6 +356,13 @@ def test_download_cookie_cannot_authorize_mutations_or_cross_site_reads(desk):
     finish(desk)
     cookie = {"X-Workbench-Token": None, "Cookie": "review_workbench_8765=test-session-value"}
     assert request(desk, f"/api/jobs/{job}/report.html", headers=cookie)[0] == 200
+    assert request(desk, f"/api/jobs/{job}/audit.md", headers=cookie)[0] == 200
+    assert request(desk, f"/api/jobs/{job}/audit.md", headers=cookie | {
+        "Origin": "https://evil.example"
+    })[0] == 403
+    assert request(desk, f"/api/jobs/{job}/audit.md", headers={
+        "X-Workbench-Token": None
+    })[0] == 403
     assert request(desk, f"/api/jobs/{job}", headers=cookie)[0] == 403
     assert request(desk, f"/api/jobs/{job}/report.html", headers=cookie | {
         "Origin": "https://evil.example"
@@ -452,7 +467,7 @@ def test_memory_key_used_by_core_input_safety_repair_and_transport(desk, monkeyp
     assert any(n["kind"] == "REPAIR" for n in detail["view"]["nodes"]) is not leaked_reply
     assert detail["summary"]["totals"]["settled_cost_nusd"] > 0
     assert API_KEY not in json.dumps(detail)
-    for kind in ("trace.json", "report.html", "report.md"):
+    for kind in ("trace.json", "report.html", "report.md", "audit.md"):
         assert API_KEY.encode() not in desk.download(job, kind)[0]
     for p in desk.root.rglob("*"):
         if p.is_file():

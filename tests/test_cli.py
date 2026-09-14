@@ -39,6 +39,10 @@ def test_cli_review_resume_read_commands(tmp_path):
     assert run.returncode == 0, run.stderr
     data = json.loads(run.stdout)
     assert output.exists() and data["status"] == "COMPLETED"
+    assert "# 代码审阅报告" in output.read_text()
+    assert "调用账本" not in output.read_text()
+    audit = output.with_name("report.audit.md")
+    assert data["audit_report_written"] and "调用账本" in audit.read_text()
     for command in ("resume", "status", "report", "trace"):
         args = [command, "--task", data["task_id"], "--state-dir", state]
         if command == "trace":
@@ -48,6 +52,8 @@ def test_cli_review_resume_read_commands(tmp_path):
         parsed = json.loads(result.stdout)
         if command != "trace":
             assert parsed["totals"]["settled_tokens"] == 300
+        if command in ("resume", "report"):
+            assert (state / data["task_id"] / "report.audit.md").is_file()
 
 
 def test_task_lock_rejects_second_process(harness):

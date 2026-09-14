@@ -19,7 +19,7 @@ from pydantic import Field, SecretStr, model_validator
 from review_agent import app
 from review_agent.config import usd_to_nusd
 from review_agent.contracts import AgentError, StrictModel, digest, json_text
-from review_agent.report import render
+from review_agent.report import render_audit, render_review, review_scope_note
 from review_agent.safety import Safety
 from review_agent.viewer.export import render_html
 from review_agent.viewer.projection import project
@@ -375,7 +375,12 @@ class Workbench:
             trace = app.trace(snapshot)
             value.update(
                 summary=app.summary(snapshot), view=project(trace),
+                review_scope_note=review_scope_note(snapshot),
                 files=snapshot["snapshot"]["files"], excluded=snapshot["snapshot"]["excluded"],
+                hunk_paths={
+                    hunk_id: unit["path"]
+                    for unit in snapshot["units"] for hunk_id in unit["hunk_ids"]
+                },
                 safe_diff=snapshot["snapshot"]["safe_diff"],
                 redactions=snapshot["snapshot"]["redactions"],
                 budget={k: snapshot["config"][k] for k in (
@@ -400,7 +405,9 @@ class Workbench:
         if snapshot is None:
             raise APIError("INPUT_NOT_COMMITTED", 409)
         if kind == "report.md":
-            return render(snapshot).encode(), "text/markdown; charset=utf-8"
+            return render_review(snapshot).encode(), "text/markdown; charset=utf-8"
+        if kind == "audit.md":
+            return render_audit(snapshot).encode(), "text/markdown; charset=utf-8"
         trace = app.trace(snapshot)
         trace["workbench"] = {
             "job_id": job_id, "task_status": snapshot["task"]["status"],

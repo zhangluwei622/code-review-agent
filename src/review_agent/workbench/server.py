@@ -101,7 +101,7 @@ class Handler(BaseHTTPRequestHandler):
         # Download navigation cannot set a custom header. Only these read-only
         # attachments accept the same-origin session cookie; mutations never do.
         if api and not mutation and re.fullmatch(
-            r"/api/jobs/[a-zA-Z0-9_-]{16,64}/(report\.md|trace\.json|report\.html)",
+            r"/api/jobs/[a-zA-Z0-9_-]{16,64}/(report\.md|audit\.md|trace\.json|report\.html)",
             urlsplit(self.path).path,
         ):
             cookie = SimpleCookie()
@@ -161,7 +161,8 @@ class Handler(BaseHTTPRequestHandler):
             return self.reply(200, workbench.settings())
         else:
             match = re.fullmatch(
-                r"/api/jobs/([a-zA-Z0-9_-]{16,64})(?:/(report\.md|trace\.json|report\.html))?", path
+                r"/api/jobs/([a-zA-Z0-9_-]{16,64})"
+                r"(?:/(report\.md|audit\.md|trace\.json|report\.html))?", path
             )
             if match:
                 if match[2]:

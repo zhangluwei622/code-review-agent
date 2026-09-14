@@ -66,7 +66,74 @@ def context_coverage(data, unit):
     return len(seen), len(all_lines)
 
 
+def review_scope_note(data: dict) -> str:
+    """Brief coverage caveat for the code report, with operational facts kept in audit."""
+    units = data["units"]
+    if not units:
+        return "未进行模型审阅：没有可审阅的 Python 文本变更。"
+    done = sum(unit["status"] == "DONE" for unit in units)
+    if data["task"]["status"] != "COMPLETED" or done != len(units):
+        return f"审阅尚未完整结束，已完成 {done}/{len(units)} 个单元；以下仅为当前结果。"
+    if data["config"].get("schema_version", 1) >= 5:
+        if any(seen < total for seen, total in (context_coverage(data, u) for u in units)):
+            return "已完成本轮审阅，部分上下文未覆盖；结论仅基于已提供的代码。"
+    return "已完成本轮审阅，范围限于所提供的代码变更。"
+
+
+def render_review(data: dict) -> str:
+    """Concise code findings; no execution, cost, tool, or trace details."""
+    files = {f["file_id"]: f["path"] for f in data["snapshot"]["files"]}
+    evidence = evidence_index(data["snapshot"])
+    findings = [finding_data(row) for row in data["findings"]]
+    levels = {"high": "高", "medium": "中", "low": "低", "reference": "仅供参考"}
+    out = ["# 代码审阅报告", ""]
+    if data["config"]["execution_mode"] == "fixture":
+        out.extend(["> 离线演示：使用预置回复，不代表真实模型审阅质量。", ""])
+    out.extend([escape(review_scope_note(data)), "", "## 建议修改的问题", ""])
+    formal = [f for f in findings if f["confidence"] != "reference"]
+    reference = [f for f in findings if f["confidence"] == "reference"]
+    if not formal:
+        out.extend(["本次未报告正式代码问题；这不代表代码没有缺陷。", ""])
+    for title, items in ((None, formal), ("仅供参考（尚未确认为缺陷）", reference)):
+        if title and items:
+            out.extend([f"## {title}", ""])
+        for finding in items:
+            anchor = f"{finding['hunk_id']}:{finding['side']}:{finding['line']}"
+            path = files[evidence[anchor]["file_id"]]
+            side = "变更后" if finding["side"] == "new" else "变更前"
+            out.extend([
+                f"### {escape(path)} · {side}第 {finding['line']} 行",
+                "",
+                f"**{escape(finding['title'])}**",
+                "",
+                f"严重性：{levels[finding['severity']]}；置信度：{levels[finding['confidence']]}。",
+                "",
+            ])
+            for label, field in (
+                ("触发条件", "trigger"), ("问题", "actual_behavior"),
+                ("影响", "impact"), ("修改建议", "suggestion"),
+            ):
+                out.append(f"- {label}：{escape(finding[field])}")
+            if finding["truncated_source"]:
+                out.append("- 说明：该条来自截断回复，审阅尚未完整结束。")
+            out.append("")
+    if data["snapshot"]["excluded"]:
+        out.extend(["## 未审阅的文件", ""])
+        reasons = {"BINARY": "二进制文件", "NO_PYTHON_TEXT_CHANGE": "没有 Python 文本变更"}
+        for item in data["snapshot"]["excluded"]:
+            out.append(f"- {escape(item['path'])}：{reasons[item['reason']]}")
+        out.append("")
+    body = "\n".join(out)
+    Safety().require_safe(body)
+    return body
+
+
+def render_audit(data: dict) -> str:
+    return render(data).replace("# Code Review 报告", "# 执行与审计明细", 1)
+
+
 def render(data: dict) -> str:
+    """Original comprehensive export, retained for historical evaluation compatibility."""
     task, config, totals = data["task"], data["config"], data["totals"]
     units, attempts = data["units"], data["attempts"]
     done = sum(u["status"] == "DONE" for u in units)

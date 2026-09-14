@@ -54,9 +54,12 @@ def test_source_and_local_diff_requests_are_identical(tmp_path):
     assert trace["source"]["base_sha"] == source.manifest.base_sha
     output = tmp_path / "report.md"
     app.export_report(data, output)
-    assert "来源快照" in output.read_text()
-    assert "未接入 GitHub/GitLab URL" not in output.read_text()
-    assert "GitLab 仅 mock 验收" in output.read_text()
+    assert "代码审阅报告" in output.read_text() and "来源快照" not in output.read_text()
+    audit = tmp_path / "report.audit.md"
+    app.export_audit(data, audit)
+    assert "来源快照" in audit.read_text()
+    assert "未接入 GitHub/GitLab URL" not in audit.read_text()
+    assert "GitLab 仅 mock 验收" in audit.read_text()
 
 
 def test_resume_uses_committed_source_without_source_file_or_network(tmp_path, monkeypatch):

@@ -148,7 +148,9 @@ def main() -> int:
         if args.command in ("review", "resume", "report"):
             output = args.output or args.state_dir / task_id / "report.md"
             app.export_report(snapshot, output)
+            app.export_audit(snapshot, output.with_name(output.stem + ".audit.md"))
             value["report_written"] = True
+            value["audit_report_written"] = True
         print(json.dumps(value, ensure_ascii=False, indent=2))
         return exit_code(snapshot) if args.command in ("review", "resume") else 0
     except AgentError as error:

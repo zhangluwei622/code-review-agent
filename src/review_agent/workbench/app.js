@@ -254,30 +254,36 @@ function renderInspector() {
 function renderReport(data) {
   const s = data?.summary, panel = $("report-content");
   $("report-status").textContent = s ? label(s.status) : "尚未生成"; $("report-status").className = "badge " + tone(s?.status);
-  if (!s) { panel.className = "report-empty"; panel.textContent = "完成审阅后，问题、覆盖范围和关联证据会自动汇总到这里。"; return; }
+  if (!s) { panel.className = "report-empty"; panel.textContent = "完成审阅后，这里展示代码位置、问题和修改建议。"; return; }
   panel.className = "";
   const findings = data.view.findings, formal = findings.filter(f => f.data.confidence !== "reference");
-  const summary = el("div", null, "report-summary"), words = el("div");
-  const headline = s.status === "COMPLETED" ? formal.length ? `发现 ${formal.length} 个正式问题` : "已完成审阅，本次未报告正式问题" : `当前 ${formal.length} 条正式评论 · ${label(s.status)}`;
-  words.append(el("strong", headline), el("p", `${findings.length - formal.length} 条参考提示 · ${(s.units || []).filter(u => u.status === "DONE").length}/${s.units.length} 个单元已审阅${data.job.mode === "fixture" ? " · 演示结果不计质量成绩" : " · 零发现不代表代码没有缺陷"}`));
-  summary.append(words, el("span", `${number(s.totals.settled_tokens)} tokens · ${usd(s.totals.settled_cost_nusd)}`, "muted small"));
-  const cards = findings.map(f => {
+  const levels = { high: "高", medium: "中", low: "低", reference: "仅供参考" };
+  const card = f => {
     const box = el("article", null, "finding"), title = el("div", null, "finding-title"), d = f.data;
-    title.append(el("span", d.severity || "—", "badge " + (d.severity === "high" ? "failed" : "warning")), el("h3", d.title), el("span", "置信度 " + d.confidence, "badge neutral"));
+    title.append(el("span", "严重性 " + levels[d.severity], "badge " + (d.severity === "high" ? "failed" : "warning")), el("h3", d.title), el("span", "置信度 " + levels[d.confidence], "badge neutral"));
     const dl = el("dl");
-    for (const [key, caption] of [["trigger", "触发条件"], ["actual_behavior", "实际行为"], ["expected_behavior", "预期行为"], ["introduced_by", "变更因果"], ["impact", "影响"], ["suggestion", "建议"]]) {
+    for (const [key, caption] of [["trigger", "触发条件"], ["actual_behavior", "问题"], ["impact", "影响"], ["suggestion", "修改建议"]]) {
       if (d[key]) dl.append(el("dt", caption), el("dd", d[key]));
     }
-    const b = button("查看关联请求、回复与证据 ↗", () => { inspect(f.node_id); state.detailTab = "evidence"; renderInspector(); });
-    b.disabled = !f.node_id; box.append(title, dl, b); return box;
-  });
-  const coverage = el("div", null, "coverage");
-  for (const u of s.units) {
-    const unit = el("div", null, "unit"); unit.append(el("strong", u.unit_id), document.createTextNode(label(u.status)));
-    if (u.reason) unit.append(el("p", u.reason)); coverage.append(unit);
+    if (d.truncated_source) dl.append(el("dt", "说明"), el("dd", "该条来自截断回复，审阅尚未完整结束。"));
+    const location = el("p", `${data.hunk_paths[d.hunk_id]} · ${d.side === "new" ? "变更后" : "变更前"}第 ${d.line} 行`, "finding-location");
+    box.append(location, title, dl); return box;
+  };
+  const heading = el("div", null, "report-summary");
+  heading.append(el("strong", "建议修改的问题"), el("p", data.review_scope_note));
+  if (data.job.mode === "fixture") heading.append(el("p", "离线演示结果，不代表真实模型审阅质量。"));
+  const cards = formal.map(card);
+  if (!formal.length) heading.append(el("p", `暂无正式修改建议 · ${label(s.status)}；零评论不代表代码没有缺陷。`));
+  const references = findings.filter(f => f.data.confidence === "reference");
+  if (references.length) {
+    const referenceHeading = el("div", null, "report-summary");
+    referenceHeading.append(el("strong", "仅供参考（尚未确认为缺陷）"));
+    cards.push(referenceHeading, ...references.map(card));
   }
-  for (const f of data.excluded || []) { const box = el("div", null, "unit"); box.append(el("strong", f.path), document.createTextNode("已排除"), el("p", f.reason)); coverage.append(box); }
-  panel.replaceChildren(summary, ...cards, coverage);
+  const coverage = el("div", null, "coverage");
+  const excludedReasons = { BINARY: "二进制文件", NO_PYTHON_TEXT_CHANGE: "没有 Python 文本变更" };
+  for (const f of data.excluded || []) { const box = el("div", null, "unit"); box.append(el("strong", f.path), document.createTextNode("未审阅"), el("p", excludedReasons[f.reason])); coverage.append(box); }
+  panel.replaceChildren(heading, ...cards, coverage);
 }
 async function poll() {
   try {

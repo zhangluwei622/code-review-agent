@@ -21,7 +21,7 @@ from review_agent.gateway import Gateway
 from review_agent.ingest import prepare_diff, prepare_text
 from review_agent.pricing import current_deepseek_pricing, require_current_pricing
 from review_agent.providers import DeepSeekProvider, FixtureProvider
-from review_agent.report import render, write_report
+from review_agent.report import render_audit, render_review, write_report
 from review_agent.safety import Safety
 from review_agent.storage import Storage
 
@@ -385,7 +385,11 @@ def review_historical_costs(task_id: str, state_dir: Path) -> dict:
 
 
 def export_report(snapshot: dict, output: Path):
-    write_report(output, render(snapshot))
+    write_report(output, render_review(snapshot))
+
+
+def export_audit(snapshot: dict, output: Path):
+    write_report(output, render_audit(snapshot))
 
 
 def summary(snapshot: dict) -> dict:
